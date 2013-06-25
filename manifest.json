@@ -1,0 +1,24 @@
+{
+		"name": "Charmin",
+		"version": "1.1.1",
+		"manifest_version": 2,
+		"description": "A less-ugly Target Process",
+		"update_url": "http://myhost.com/mytestextension/updates.xml",
+		"icons": { "64": "icon-128.png", "48": "icon-48.png", "32": "icon-32.png" },
+		"permissions": [
+				"tabs",
+				"http://analyte.tpondemand.com/*", "https://analyte.tpondemand.com/*"
+		],
+		"background": {
+				"scripts": ["init.js"]
+		},
+		"content_scripts": [
+				{
+						"matches": [
+								"http://analyte.tpondemand.com/*", "https://analyte.tpondemand.com/*"
+						],
+						"css": ["styles.css"],
+						"js": ["jquery.js", "start.js"]
+				}
+		]
+}
