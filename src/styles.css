@@ -32,3 +32,20 @@
 #advanced_shortcuts {
   float:left;
 }
+
+.special_modal {
+  border:1px solid #ccc;
+  box-shadow:1px 2px 3px #aaa;
+  position:fixed;
+  top:20%;
+  left:10%;
+  background:#fff;
+  padding:10px;
+}
+.special_modal input {
+  font-size:28px;
+  color:#888;
+  padding:5px;
+  border:1px solid #bbb;
+  width:600px !important;
+}

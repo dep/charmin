@@ -75,6 +75,7 @@ $(document).ready(function() {
       code = event.keyCode;
 
       var active_el = $(document.activeElement);
+      console.log(code);
       if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA" && !active_el.hasClass("cke_wysiwyg_div")) {
         /* go to */
         if (code == "71") {
@@ -87,7 +88,17 @@ $(document).ready(function() {
             find_tab("Bugs");
         } else if (code == "73" && key_active) {
             find_tab("Iteration Plan");
-        } else if (code == "78" && key_active) {
+        } else if (code == "76" && key_active) {
+            $("body").append("<div class='special_modal' id='leap'><input type='text' placeholder='enter bug/story ID'></div>");
+            $("#leap input").focus();
+            $("#leap input").keyup(function(event) {
+                event.preventDefault();
+                if (event.keyCode == 13) {
+                    window.location.href = "http://analyte.tpondemand.com/entity/" + $("#leap input").val();
+                } else if (event.keyCode == 27) {
+                    $("#leap").remove();
+                }
+            });
         } else if (code == "191" && event.shiftKey != true) {
             $("#topSearch input[type='text']").focus();
         } else {
