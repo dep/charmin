@@ -74,7 +74,8 @@ $(document).ready(function() {
     $("body").live("keyup", function(event) {
       code = event.keyCode;
 
-      if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA") {
+      var active_el = $(document.activeElement);
+      if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA" && !active_el.hasClass("cke_wysiwyg_div")) {
         /* go to */
         if (code == "71") {
           key_active = code;
