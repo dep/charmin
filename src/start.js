@@ -94,7 +94,13 @@ $(document).ready(function() {
             $("#leap input").keyup(function(event) {
                 event.preventDefault();
                 if (event.keyCode == 13) {
-                    window.location.href = "http://analyte.tpondemand.com/entity/" + $("#leap input").val();
+                    var url = "http://analyte.tpondemand.com/entity/" + $("#leap input").val();
+                    if (event.shiftKey == true) {
+                        chrome.extension.sendMessage({url: url}, function(response) { });
+                        $("#leap").remove();
+                    } else {
+                        window.location.href = url;
+                    }
                 } else if (event.keyCode == 27) {
                     $("#leap").remove();
                 }
