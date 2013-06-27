@@ -1,5 +1,8 @@
-.generalTable tr.odd td {
-    background:#eee;
+.generalTable tr:nth-child(odd) {
+    background-color:#eee;
+}
+.footerRow * {
+    background:#ffffe7 !important;
 }
 .ui-description p {
     color:#888;

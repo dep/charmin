@@ -4,9 +4,6 @@ var clp_first_bookmark = "";
 var clp_last_bookmark = "";
 
 $(document).ready(function() {
-
-    $(".generalTable tr:odd").addClass("odd");
-
     active_class = "selected_clipping"
     refresh_bookmarks();
     clp_first_bookmark.addClass(active_class);
@@ -75,7 +72,6 @@ $(document).ready(function() {
       code = event.keyCode;
 
       var active_el = $(document.activeElement);
-      console.log(code);
       if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA" && !active_el.hasClass("cke_wysiwyg_div")) {
         /* go to */
         if (code == "71") {
