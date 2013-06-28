@@ -28,7 +28,8 @@ $(document).ready(function() {
         prev_item = tp_active_item.prev(".tp_wrap");
         next_item = tp_active_item.next(".tp_wrap");
 
-        if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA") {
+        var active_el = $(document.activeElement);
+        if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA"  && !active_el.hasClass("cke_wysiwyg_div")) {
             /* n or ] */
             if (code == "110" || code == "93") {
                 navigate(next_item);
