@@ -146,7 +146,7 @@ $(document).ready(function() {
       }
     });
 
-    $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong><br><br>? = show/hide this window<br><br><strong>Navigation</strong><br>n or ] = next story<br>p or [ = previous story<br>/ = Focus search box<br>g, d = Go to Dashboard<br>g, u = Go to User Stories<br>g, b = Go to Bugs<br>g, i = Go to Iteration Plan<br><br><strong>Selected Item</strong><br>[enter] = open selected<br>[shift-enter] = open selected in new tab");
+    $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong><br><br>? = show/hide this window<br><br><strong>Navigation</strong><br>n or ] = next story<br>p or [ = previous story<br>/ = Focus search box<br>g, d = Go to Dashboard<br>g, u = Go to User Stories<br>g, b = Go to Bugs<br>g, i = Go to Iteration Plan<br>g, l = Leap to a specific case<br><br><strong>Selected Item</strong><br>[enter] = open selected<br>[shift-enter] = open selected in new tab");
 });
 
 function scroll_to(bookmark) {
