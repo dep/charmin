@@ -1,160 +1,121 @@
 var key_active = "";
-var clp_active_bookmark = "";
-var clp_first_bookmark = "";
-var clp_last_bookmark = "";
+var tp_active_item = "";
+var tp_first_item = "";
+var tp_last_item = "";
+var active_class = "";
 
 $(document).ready(function() {
-    active_class = "selected_clipping"
-    refresh_bookmarks();
-    clp_first_bookmark.addClass(active_class);
+    active_class = "selected_item"
+    refresh_items();
+    tp_first_item.addClass(active_class);
+    stripe();
+    bug_grid();
 
-    // Click to make clicked active
-    $(".microbookmark-container").live("click", function() {
-      $(".clp_item_wrap").removeClass(active_class);
-      $(this).addClass(active_class);
-      refresh_bookmarks();
+    // Catch slow-loading items
+    setTimeout('refresh_items();stripe()', 1000);
+    setInterval('bug_grid()', 3000);
+
+    // Listener to make clicked item active
+    $("#main .generalTable tr").live("click", function() {
+        $(".tp_wrap").removeClass(active_class);
+        $(this).addClass(active_class);
+        refresh_items();
     });
 
     $("body").live("keypress", function(event) {
-      code = event.keyCode;
-      clp_active_bookmark = $(".selected_clipping");
-      prev_bookmark = clp_active_bookmark.prev(".clp_item_wrap");
-      next_bookmark = clp_active_bookmark.next(".clp_item_wrap");
+        code = event.keyCode;
+        tp_active_item = $(".selected_item");
+        prev_item = tp_active_item.prev(".tp_wrap");
+        next_item = tp_active_item.next(".tp_wrap");
 
-      var active_el = $(document.activeElement);
-      if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA" && !active_el.hasClass("cke_wysiwyg_div")) {
-        /* n or ] */
-        if (code == "110" || code == "93") {
-          if (clp_active_bookmark.length > 0) {
-            if (next_bookmark.hasClass("clp_item_wrap")) {
-              next_bookmark.addClass(active_class);
-              clp_active_bookmark.removeClass(active_class);
-            } else {
-              //clp_first_bookmark.addClass(active_class);
-              clp_active_bookmark.removeClass(active_class);
+        if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA") {
+            /* n or ] */
+            if (code == "110" || code == "93") {
+                navigate(next_item);
+                scroll_to(tp_active_item);
+            /* p or [ */
+            } else if (code == "112" || code == "91") {
+                navigate(prev_item);
+                scroll_to(tp_active_item.first());
+            /* ? */
+            } else if (code == "63" && event.shiftKey == true) {
+                if ($("#advanced_shortcuts").is(":visible") == true) {
+                    $("#advanced_shortcuts").hide();
+                } else {
+                    $("#advanced_shortcuts").show();
+                }
             }
-          } else {
-            clp_first_bookmark.addClass(active_class);
-          }
-          refresh_bookmarks();
-          scroll_to(clp_active_bookmark);
-        /* p or [ */
-        } else if (code == "112" || code == "91") {
-          if (clp_active_bookmark.length > 0) {
-            if (prev_bookmark.hasClass("clp_item_wrap")) {
-              prev_bookmark.addClass(active_class);
-              clp_active_bookmark.removeClass(active_class);
-            } else {
-              //clp_last_bookmark.addClass(active_class);
-              clp_active_bookmark.removeClass(active_class);
-            }
-          } else {
-            clp_first_bookmark.addClass(active_class);
-          }
-          refresh_bookmarks();
-          scroll_to(clp_active_bookmark.first());
-        /* ? */
-        } else if (code == "63" && event.shiftKey == true) {
-          if ($("#advanced_shortcuts").is(":visible") == true) {
-            $("#advanced_shortcuts").hide();
-          } else {
-            $("#advanced_shortcuts").show();
-          }
-        /* x */
-        } else if (code == "120") {
-        /* esc */
-        } else if (code == "27") {
-          /* TODO: How to get focus back? */
         }
-      }
     });
 
     $("body").live("keyup", function(event) {
-      code = event.keyCode;
+        code = event.keyCode;
 
-      var active_el = $(document.activeElement);
-      if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA" && !active_el.hasClass("cke_wysiwyg_div")) {
-        /* go to */
-        if (code == "71") {
-          key_active = code;
-        } else if (code == "85" && key_active) {
-            find_tab("User Stories");
-        } else if (code == "68" && key_active) {
-            find_tab("Dashboard");
-        } else if (code == "66" && key_active) {
-            find_tab("Bugs");
-        } else if (code == "73" && key_active) {
-            find_tab("Iteration Plan");
-        } else if (code == "76" && key_active) {
-            $("body").append("<div class='special_modal' id='leap'><input type='text' placeholder='enter bug/story ID'></div>");
-            $("#leap input").focus();
-            $("#leap input").keyup(function(event) {
-                event.preventDefault();
-                if (event.keyCode == 13) {
-                    var url = "http://analyte.tpondemand.com/entity/" + $("#leap input").val();
-                    if (event.shiftKey == true) {
-                        chrome.extension.sendMessage({url: url}, function(response) { });
+        var active_el = $(document.activeElement);
+        if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA" && !active_el.hasClass("cke_wysiwyg_div")) {
+            /* go to */
+            if (code == "71") {
+                key_active = code;
+            } else if (code == "85" && key_active) {
+                    find_tab("User Stories");
+            } else if (code == "68" && key_active) {
+                    find_tab("Dashboard");
+            } else if (code == "66" && key_active) {
+                    find_tab("Bugs");
+            } else if (code == "73" && key_active) {
+                    find_tab("Iteration Plan");
+            } else if (code == "76" && key_active) {
+                $("body").append("<div class='special_modal' id='leap'><input type='text' placeholder='enter bug/story ID'></div>");
+                $("#leap input").focus();
+                $("#leap input").keyup(function(event) {
+                    event.preventDefault();
+                    if (event.keyCode == 13) {
+                        var url = "http://analyte.tpondemand.com/entity/" + $("#leap input").val();
+                        if (event.shiftKey == true) {
+                            chrome.extension.sendMessage({url: url}, function(response) { });
+                            $("#leap").remove();
+                        } else {
+                            window.location.href = url;
+                        }
+                    } else if (event.keyCode == 27) {
                         $("#leap").remove();
+                    }
+                });
+            } else if (code == "191" && event.shiftKey != true) {
+                $("#topSearch input[type='text']").focus();
+            } else {
+                key_active = null;
+            }
+
+            /* Enter/shift-enter */
+            if (code == "13" || (code == "13" && event.shiftKey == true)) {
+                /* shift-enter */
+                var url;
+                if (tp_active_item.find("a.list-name").length > 0) {
+                    url = tp_active_item.find("a.list-name").attr("href")
+                } else if (tp_active_item.find("a.h3").length > 0) {
+                    url = tp_active_item.find("a.h3").attr("href")
+                }
+
+                if (url) {
+                    if (event.shiftKey == true) {
+                        chrome.extension.sendMessage({url: "http://" + window.location.hostname + url}, function(response) { });
+                    /* enter */
                     } else {
                         window.location.href = url;
                     }
-                } else if (event.keyCode == 27) {
-                    $("#leap").remove();
-                }
-            });
-        } else if (code == "191" && event.shiftKey != true) {
-            $("#topSearch input[type='text']").focus();
-        } else {
-          key_active = null;
-        }
-
-        /* Enter/shift-enter */
-        if (code == "13" || (code == "13" && event.shiftKey == true)) {
-            /* shift-enter */
-            var url;
-            if (clp_active_bookmark.find("a.list-name").length > 0) {
-                url = clp_active_bookmark.find("a.list-name").attr("href")
-            } else if (clp_active_bookmark.find("a.h3").length > 0) {
-                url = clp_active_bookmark.find("a.h3").attr("href")
-            }
-
-            if (url) {
-                if (event.shiftKey == true) {
-                chrome.extension.sendMessage({url: "http://" + window.location.hostname + url}, function(response) { });
-                /* enter */
-                } else {
-                window.location.href = url;
                 }
             }
-        /* v */
-        } else if (code == "86") {
-        /* e */
-        } else if (code == "69") {
-        /* r */
-        } else if (code == "82") {
-          clp_active_bookmark.find(".icon-comment span").trigger("click");
-        /* Bookmark Type-ahead */
-        } else if (code == "220") {
-        /* c */
-        } else if (code == "67") {
         }
-      } else {
-        /* Default [enter] action */
-        //if (code == "13" && document.activeElement.tagName == "INPUT") {
-        //  $("input.submit").trigger("click");
-        //}
-      }
     });
 
     $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong><br><br>? = show/hide this window<br><br><strong>Navigation</strong><br>n or ] = next story<br>p or [ = previous story<br>/ = Focus search box<br>g, d = Go to Dashboard<br>g, u = Go to User Stories<br>g, b = Go to Bugs<br>g, i = Go to Iteration Plan<br>g, l = Leap to a specific case<br><br><strong>Selected Item</strong><br>[enter] = open selected<br>[shift-enter] = open selected in new tab");
 });
 
-function scroll_to(bookmark) {
-  if (bookmark.length > 0) {
-    scroll_bookmark = bookmark.find(".clp_item_scrollto");
-
-    scrollTo(scroll_bookmark);
-  }
+function scroll_to(item) {
+    $('html, body').animate({
+        scrollTop: $(".selected_item").offset().top-150
+    }, 150);
 }
 
 function find_tab(sub_string) {
@@ -165,14 +126,61 @@ function find_tab(sub_string) {
     });
 }
 
-function refresh_bookmarks() {
-  $("#main .generalTable tr").each(function() {
-    $(this).addClass("clp_item_wrap");
-  });
-  $("#main .generalTable tr:first-child").each(function() {
-    $(this).addClass("clp_item_scrollto");
-  });
+function refresh_items() {
+    $("#main .generalTable tr").each(function() {
+        if ($(this).is(":visible")) {
+            $(this).addClass("tp_wrap");
+        }
+    });
+    $("#main .generalTable tr:first-child").each(function() {
+        $(this).addClass("tp_item_scrollto");
+    });
 
-  clp_first_bookmark = $("body").find(".clp_item_wrap").first();
-  clp_last_bookmark = $("body").find(".clp_item_wrap").last();
+    tp_first_item = $("body").find(".tp_wrap").first();
+    tp_last_item = $("body").find(".tp_wrap").last();
+}
+
+function stripe() {
+    $(".generalTable tr.tp_wrap:odd").addClass("odd");
+}
+
+function bug_grid() {
+    $(document).ready(function() {
+        $(".show-states-dialog-link").each(function() {
+            var row_class;
+            if ($(this).html().match("Code Review")) {
+                row_class = "in_review";
+            }
+            if ($(this).html().match("New")) {
+                row_class = "new_case";
+            }
+            if ($(this).html().match("Active")) {
+                row_class = "is_active";
+            }
+            if ($(this).html().match("QA") || $(this).html().match("Demo")) {
+                row_class = "in_qa";
+            }
+            if ($(this).html().match("UAT")) {
+                row_class = "test_passed";
+            }
+            if ($(this).html().match("Resolved") || $(this).html().match("Closed")) {
+                row_class = "resolved";
+            }
+            $(this).parents("tr").first().addClass(row_class);
+        });
+    });
+}
+
+function navigate(item) {
+    if (tp_active_item.length > 0) {
+        if (item.hasClass("tp_wrap")) {
+            item.addClass(active_class);
+            tp_active_item.removeClass(active_class);
+        } else {
+            tp_active_item.removeClass(active_class);
+        }
+    } else {
+        tp_first_item.addClass(active_class);
+    }
+    refresh_items();
 }
