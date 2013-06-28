@@ -38,6 +38,9 @@ $(document).ready(function() {
             } else if (code == "112" || code == "91") {
                 navigate(prev_item);
                 scroll_to(tp_active_item.first());
+            /* s */
+            } else if (code == "115") {
+                $(".tau-sharelink button").trigger("click");
             /* ? */
             } else if (code == "63" && event.shiftKey == true) {
                 if ($("#advanced_shortcuts").is(":visible") == true) {
@@ -110,12 +113,12 @@ $(document).ready(function() {
         }
     });
 
-    $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong><br><br>? = show/hide this window<br><br><strong>Navigation</strong><br>n or ] = next story<br>p or [ = previous story<br>/ = Focus search box<br>g, d = Go to Dashboard<br>g, u = Go to User Stories<br>g, b = Go to Bugs<br>g, i = Go to Iteration Plan<br>g, l = Leap to a specific case<br><br><strong>Selected Item</strong><br>[enter] = open selected<br>[shift-enter] = open selected in new tab");
+    $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong><br><br>? = show/hide this window<br><br><strong>Navigation</strong><br>n or ] = next story<br>p or [ = previous story<br>/ = Focus search box<br>s = trigger the 'share link' modal (in a case)<br>g, d = Go to Dashboard<br>g, u = Go to User Stories<br>g, b = Go to Bugs<br>g, i = Go to Iteration Plan<br>g, l = Leap to a specific case<br><br><strong>Selected Item</strong><br>[enter] = open selected<br>[shift-enter] = open selected in new tab");
 });
 
 function scroll_to(item) {
     $('html, body').animate({
-        scrollTop: $(".selected_item").offset().top-150
+        scrollTop: $(".selected_item").offset().top-350
     }, 150);
 }
 
