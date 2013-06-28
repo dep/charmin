@@ -21,7 +21,8 @@ $(document).ready(function() {
       prev_bookmark = clp_active_bookmark.prev(".clp_item_wrap");
       next_bookmark = clp_active_bookmark.next(".clp_item_wrap");
 
-      if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA") {
+      var active_el = $(document.activeElement);
+      if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA" && !active_el.hasClass("cke_wysiwyg_div")) {
         /* n or ] */
         if (code == "110" || code == "93") {
           if (clp_active_bookmark.length > 0) {
