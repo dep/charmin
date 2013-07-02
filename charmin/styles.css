@@ -57,6 +57,7 @@ body {
   left:10%;
   background:#fff;
   padding:10px;
+  z-index:999;
 }
 .special_modal input {
   font-size:28px;

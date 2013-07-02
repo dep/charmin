@@ -8,19 +8,12 @@ $(document).ready(function() {
     active_class = "selected_item"
     refresh_items();
     tp_first_item.addClass(active_class);
-    stripe();
-    bug_grid();
+    //stripe();
+    //bug_grid();
 
     // Catch slow-loading items
-    setTimeout('refresh_items();stripe()', 1000);
-    setInterval('bug_grid()', 3000);
-
-    // Listener to make clicked item active
-    $("#main .generalTable tr").live("click", function() {
-        $(".tp_wrap").removeClass(active_class);
-        $(this).addClass(active_class);
-        refresh_items();
-    });
+    //setTimeout('refresh_items();stripe()', 1000);
+    //setInterval('bug_grid()', 3000);
 
     $("body").live("keypress", function(event) {
         code = event.keyCode;
@@ -40,7 +33,7 @@ $(document).ready(function() {
                 scroll_to(tp_active_item.first());
             /* s */
             } else if (code == "115") {
-                $(".tau-sharelink button").trigger("click");
+                //$(".tau-sharelink button").trigger("click");
             /* ? */
             } else if (code == "63" && event.shiftKey == true) {
                 if ($("#advanced_shortcuts").is(":visible") == true) {
@@ -61,13 +54,9 @@ $(document).ready(function() {
             if (code == "71") {
                 key_active = code;
             } else if (code == "85" && key_active) {
-                    find_tab("User Stories");
             } else if (code == "68" && key_active) {
-                    find_tab("Dashboard");
             } else if (code == "66" && key_active) {
-                    find_tab("Bugs");
             } else if (code == "73" && key_active) {
-                    find_tab("Iteration Plan");
             } else if (code == "76" && key_active) {
                 $("body").append("<div class='special_modal' id='leap'><input type='text' placeholder='enter bug/story ID'></div>");
                 $("#leap input").focus();
@@ -86,7 +75,7 @@ $(document).ready(function() {
                     }
                 });
             } else if (code == "191" && event.shiftKey != true) {
-                $("#topSearch input[type='text']").focus();
+                //$("#topSearch input[type='text']").focus();
             } else {
                 key_active = null;
             }
@@ -113,7 +102,7 @@ $(document).ready(function() {
         }
     });
 
-    $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong><br><br>? = show/hide this window<br><br><strong>Navigation</strong><br>n or ] = next story<br>p or [ = previous story<br>/ = Focus search box<br>s = trigger the 'share link' modal (in a case)<br>g, d = Go to Dashboard<br>g, u = Go to User Stories<br>g, b = Go to Bugs<br>g, i = Go to Iteration Plan<br>g, l = Leap to a specific case<br><br><strong>Selected Item</strong><br>[enter] = open selected<br>[shift-enter] = open selected in new tab");
+    $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong><br><br>? = show/hide this window<br><br><strong>Navigation</strong><br>g, l = Leap to a specific case");
 });
 
 function scroll_to(item) {
