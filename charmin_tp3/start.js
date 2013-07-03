@@ -82,7 +82,7 @@ $(document).ready(function() {
                 $("#leap input").keyup(function(event) {
                     if (event.keyCode != 27) {
                         $("div[role=card]").each(function() {
-                            if($(this).find(".tau-name").html().toLowerCase().match($("#leap input").val().toLowerCase())) {
+                            if($(this).find(".tau-name").html().toLowerCase().match($("#leap input").val().toLowerCase()) || $(this).find(".tau-id").html().match($("#leap input").val().toLowerCase())) {
                                 $(this).fadeIn();
                             } else {
                                 $(this).fadeOut();
