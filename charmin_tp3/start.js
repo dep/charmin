@@ -26,11 +26,14 @@ $(document).ready(function() {
             /* n or ] */
             if (code == "110" || code == "93") {
                 navigate(next_item);
-                scroll_to(tp_active_item);
             /* p or [ */
             } else if (code == "112" || code == "91") {
                 navigate(prev_item);
-                scroll_to(tp_active_item.first());
+                if (tp_active_item.length < 1) {
+                    tp_last_item.addClass(active_class);
+                    refresh_items();
+                    tp_first_item.removeClass(active_class);
+                }
             /* s */
             } else if (code == "115") {
                 //$(".tau-sharelink button").trigger("click");
@@ -100,50 +103,21 @@ $(document).ready(function() {
 
             /* Enter/shift-enter */
             if (code == "13" || (code == "13" && event.shiftKey == true)) {
-                /* shift-enter */
-                var url;
-                if (tp_active_item.find("a.list-name").length > 0) {
-                    url = tp_active_item.find("a.list-name").attr("href")
-                } else if (tp_active_item.find("a.h3").length > 0) {
-                    url = tp_active_item.find("a.h3").attr("href")
-                }
-
-                if (url) {
-                    if (event.shiftKey == true) {
-                        chrome.extension.sendMessage({url: "http://" + window.location.hostname + url}, function(response) { });
-                    /* enter */
-                    } else {
-                        window.location.href = url;
-                    }
-                }
+                window.location.href=tp_active_item.find("a").attr("href");
             }
         }
     });
 
-    $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong><br><br>? = show/hide this window<br><br><strong>Navigation</strong><br>g, l = Leap to a specific case<br>/ = enter type-ahead mode");
+    $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong>? = show/hide this window<br><br><strong>Navigation</strong>[ or p = Previous Board<br>] or n = Next Board<br>g, l = Leap to a specific case<br>/ = enter type-ahead mode<br><br><strong>Selected Board:</strong>[enter] = open selected board");
 });
 
-function scroll_to(item) {
-    $('html, body').animate({
-        scrollTop: $(".selected_item").offset().top-350
-    }, 150);
-}
-
-function find_tab(sub_string) {
-    $(".tabPlace").each(function() {
-        if ($(this).find("a").text().match(sub_string)) {
-            window.location.href = $(this).find("a").attr("href");
-        }
-    });
-}
-
 function refresh_items() {
-    $("#main .generalTable tr").each(function() {
+    $(".tau-boardselector__item").each(function() {
         if ($(this).is(":visible")) {
             $(this).addClass("tp_wrap");
         }
     });
-    $("#main .generalTable tr:first-child").each(function() {
+    $(".tau-boardselector__item").first(function() {
         $(this).addClass("tp_item_scrollto");
     });
 
