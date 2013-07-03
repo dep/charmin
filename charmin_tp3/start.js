@@ -92,6 +92,8 @@ $(document).ready(function() {
                         $("#leap").remove();
                     }
                 });
+            } else if (code == "27") {
+                $("div[role=card]").fadeIn();
             } else {
                 key_active = null;
             }
