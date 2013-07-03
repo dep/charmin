@@ -1,0 +1,23 @@
+{
+		"name": "Charmin for TP2",
+		"version": "1.4",
+		"manifest_version": 2,
+		"description": "Adding some functionality to Target Process (TP2)",
+		"icons": { "64": "icon-128.png", "48": "icon-48.png", "32": "icon-32.png" },
+		"permissions": [
+				"tabs",
+				"http://*.tpondemand.com/*", "https://*.tpondemand.com/*"
+		],
+		"background": {
+				"scripts": ["init.js"]
+		},
+		"content_scripts": [
+				{
+						"matches": [
+								"http://*.tpondemand.com/*", "https://*.tpondemand.com/*"
+						],
+						"css": ["styles.css"],
+						"js": ["jquery.js", "start.js"]
+				}
+		]
+}
