@@ -74,8 +74,24 @@ $(document).ready(function() {
                         $("#leap").remove();
                     }
                 });
+            /* / */
             } else if (code == "191" && event.shiftKey != true) {
-                //$("#topSearch input[type='text']").focus();
+                $("body").append("<div class='special_modal' id='leap'><input type='text' placeholder='Start typing to find a card by title'></div>");
+                $("div[role=card]").fadeIn();
+                $("#leap input").focus();
+                $("#leap input").keyup(function(event) {
+                    if (event.keyCode != 27) {
+                        $("div[role=card]").each(function() {
+                            if($(this).find(".tau-name").html().toLowerCase().match($("#leap input").val().toLowerCase())) {
+                                $(this).fadeIn();
+                            } else {
+                                $(this).fadeOut();
+                            }
+                        });
+                    } else {
+                        $("#leap").remove();
+                    }
+                });
             } else {
                 key_active = null;
             }
@@ -102,7 +118,7 @@ $(document).ready(function() {
         }
     });
 
-    $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong><br><br>? = show/hide this window<br><br><strong>Navigation</strong><br>g, l = Leap to a specific case");
+    $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong><br><br>? = show/hide this window<br><br><strong>Navigation</strong><br>g, l = Leap to a specific case<br>/ = enter type-ahead mode");
 });
 
 function scroll_to(item) {
