@@ -34,9 +34,22 @@ $(document).ready(function() {
                     refresh_items();
                     tp_first_item.removeClass(active_class);
                 }
-            /* s */
-            } else if (code == "115") {
-                //$(".tau-sharelink button").trigger("click");
+            /* - */
+            } else if (code == "45") {
+                var actualCode = ['var slider_val = parseFloat($(".ui-slider").slider("option", "value")) - 1;',
+                                  '$(".ui-slider").slider("option", "value", slider_val);'].join('\n');
+                var script = document.createElement('script');
+                script.textContent = actualCode;
+                (document.head||document.documentElement).appendChild(script);
+                script.parentNode.removeChild(script);
+            /* + */
+            } else if (code == "43") {
+                var actualCode = ['var slider_val = parseFloat($(".ui-slider").slider("option", "value")) + 1;',
+                                  '$(".ui-slider").slider("option", "value", slider_val);'].join('\n');
+                var script = document.createElement('script');
+                script.textContent = actualCode;
+                (document.head||document.documentElement).appendChild(script);
+                script.parentNode.removeChild(script);
             /* ? */
             } else if (code == "63" && event.shiftKey == true) {
                 if ($("#advanced_shortcuts").is(":visible") == true) {
@@ -108,7 +121,7 @@ $(document).ready(function() {
         }
     });
 
-    $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong>? = show/hide this window<br><br><strong>Navigation</strong>[ or p = Previous Board<br>] or n = Next Board<br>g, l = Leap to a specific case<br>/ = enter type-ahead mode<br><br><strong>Selected Board:</strong>[enter] = open selected board");
+    $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong>? = show/hide this window<br><br><strong>Navigation</strong>[ or p = Previous Board<br>] or n = Next Board<br>g, l = Leap to a specific case<br>/ = enter type-ahead mode<br>- = zoom out cards<br>+ = zoom in cards<br><br><strong>Selected Board:</strong>[enter] = open selected board");
 });
 
 function refresh_items() {
