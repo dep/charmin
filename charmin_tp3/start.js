@@ -8,12 +8,6 @@ $(document).ready(function() {
     active_class = "selected_item"
     refresh_items();
     tp_first_item.addClass(active_class);
-    //stripe();
-    //bug_grid();
-
-    // Catch slow-loading items
-    //setTimeout('refresh_items();stripe()', 1000);
-    //setInterval('bug_grid()', 3000);
 
     $("body").live("keypress", function(event) {
         code = event.keyCode;
@@ -69,43 +63,47 @@ $(document).ready(function() {
             /* go to */
             if (code == "71") {
                 key_active = code;
-            } else if (code == "85" && key_active) {
-            } else if (code == "68" && key_active) {
-            } else if (code == "66" && key_active) {
-            } else if (code == "73" && key_active) {
+            /* c */
+            } else if (code == "67") {
+                make_action_container();
+                var title = "#" + $(".tau-selected .tau-id-text").html() + ": " + $(".tau-selected .tau-name").html()
+                $(".action_container input").val(title);
+                $(".action_container input").select();
             } else if (code == "76" && key_active) {
-                $("body").append("<div class='special_modal' id='leap'><input type='text' placeholder='enter bug/story ID'></div>");
-                $("#leap input").focus();
-                $("#leap input").keyup(function(event) {
+                make_action_container('enter bug/story ID (comma separated IDs open in tabs)');
+                $(".action_container input").focus();
+                $(".action_container input").keyup(function(event) {
                     event.preventDefault();
                     if (event.keyCode == 13) {
-                        var url = "http://analyte.tpondemand.com/entity/" + $("#leap input").val();
-                        if (event.shiftKey == true) {
-                            chrome.extension.sendMessage({url: url}, function(response) { });
-                            $("#leap").remove();
+                        ids = $(".action_container input").val();
+                        if (event.shiftKey == true || ids.match(",")) {
+                            var url_array = ids.split(",");
+                            for (var x=0; x < url_array.length; x++) {
+                                chrome.extension.sendMessage({url: "http://analyte.tpondemand.com/entity/" + url_array[x]}, function(response) { });
+                            }
+                            $(".action_container").remove();
                         } else {
+                            var url = "http://analyte.tpondemand.com/entity/" + ids;
                             window.location.href = url;
                         }
-                    } else if (event.keyCode == 27) {
-                        $("#leap").remove();
                     }
                 });
             /* / */
             } else if (code == "191" && event.shiftKey != true) {
-                $("body").append("<div class='special_modal' id='leap'><input type='text' placeholder='Start typing to find a card by title'></div>");
+                make_action_container('Start typing to find a card by title');
                 $("div[role=card]").fadeIn();
-                $("#leap input").focus();
-                $("#leap input").keyup(function(event) {
+                $(".action_container input").focus();
+                $(".action_container input").keyup(function(event) {
                     if (event.keyCode != 27) {
                         $("div[role=card]").each(function() {
-                            if($(this).find(".tau-name").html().toLowerCase().match($("#leap input").val().toLowerCase()) || $(this).find(".tau-id").html().match($("#leap input").val().toLowerCase())) {
+                            if($(this).find(".tau-name").html().toLowerCase().match($(".action_container input").val().toLowerCase()) || $(this).find(".tau-id").html().match($(".action_container input").val().toLowerCase())) {
                                 $(this).fadeIn();
                             } else {
                                 $(this).fadeOut();
                             }
                         });
                     } else {
-                        $("#leap").remove();
+                        $("div[role=card]").fadeIn();
                     }
                 });
             } else if (code == "27") {
@@ -116,12 +114,14 @@ $(document).ready(function() {
 
             /* Enter/shift-enter */
             if (code == "13" || (code == "13" && event.shiftKey == true)) {
-                window.location.href=tp_active_item.find("a").attr("href");
+                if (tp_active_item.find("a").length) {
+                    window.location.href=tp_active_item.find("a").attr("href");
+                }
             }
         }
     });
 
-    $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong>? = show/hide this window<br><br><strong>Navigation</strong>[ or p = Previous Board<br>] or n = Next Board<br>g, l = Leap to a specific case<br>/ = enter type-ahead mode<br>- = zoom out cards<br>+ = zoom in cards<br><br><strong>Selected Board:</strong>[enter] = open selected board");
+    $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong>? = show/hide this window<br><br><strong>Navigation</strong>[ or p = Previous Board<br>] or n = Next Board<br>g, l = Leap to a specific case (comma separated IDs open in tabs)<br>/ = enter type-ahead mode<br>- = zoom out cards<br>+ = zoom in cards<br><br><strong>Selected Item:</strong>[enter] = open selected board<br>c = Expose the ID/Title of selected card");
 });
 
 function refresh_items() {
@@ -181,4 +181,18 @@ function navigate(item) {
         tp_first_item.addClass(active_class);
     }
     refresh_items();
+}
+
+function make_action_container(placeholder) {
+    if (!placeholder) {
+        placeholder = ""
+    }
+    $(".action_container").remove();
+    $("body").before("<div class='action_container'><input type='text' placeholder='" + placeholder + "'></div>");
+    $(".action_container").slideDown();
+    $(".action_container input").keyup(function(event) {
+        if (event.keyCode == 27) {
+            $(".action_container").remove();
+        }
+    });
 }

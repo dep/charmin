@@ -1,6 +1,16 @@
 .selected_item {
   background:#FDFFE5 !important;
 }
+.action_container {
+    display:none;
+}
+.action_container {
+    padding:8px;
+}
+.action_container input {
+    width:99%;
+    font-size:18px;
+}
 
 .ui-description p {
     color:#888;
@@ -13,7 +23,7 @@
   position:fixed !important;
   left:300px !important;
   top:100px;
-  width:450px;
+  width:520px;
   padding:10px !important;
   border:1px solid #ddd;
   height:auto !important;
@@ -31,22 +41,4 @@
 #overlay_shortcuts table,
 #advanced_shortcuts {
   float:left;
-}
-
-.special_modal {
-  border:1px solid #ccc;
-  box-shadow:1px 2px 3px #aaa;
-  position:fixed;
-  top:20%;
-  left:10%;
-  background:#fff;
-  padding:10px;
-  z-index:999;
-}
-.special_modal input {
-  font-size:28px;
-  color:#888;
-  padding:5px;
-  border:1px solid #bbb;
-  width:600px !important;
 }
