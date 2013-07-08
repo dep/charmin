@@ -65,10 +65,13 @@ $(document).ready(function() {
                 key_active = code;
             /* c */
             } else if (code == "67") {
-                make_action_container();
-                var title = "#" + $(".tau-selected .tau-id-text").html() + ": " + $(".tau-selected .tau-name").html()
-                $(".action_container input").val(title);
-                $(".action_container input").select();
+                if ($(".tau-selected").length) {
+                    make_action_container();
+                    var title = "#" + $(".tau-selected .tau-id-text").html() + ": " + $(".tau-selected .tau-name").html()
+                    $(".action_container input").prop("readonly", true);
+                    $(".action_container input").val(title);
+                    $(".action_container input").select();
+                }
             } else if (code == "76" && key_active) {
                 make_action_container('enter bug/story ID (comma separated IDs open in tabs)');
                 $(".action_container input").focus();
@@ -88,6 +91,12 @@ $(document).ready(function() {
                         }
                     }
                 });
+            } else if (code == "83" && !key_active) {
+                make_action_container();
+                var title = "http://analyte.tpondemand.com/entity/" + $(".tau-selected .tau-id-text").html();
+                $(".action_container input").prop("readonly", true);
+                $(".action_container input").val(title);
+                $(".action_container input").select();
             /* / */
             } else if (code == "191" && event.shiftKey != true) {
                 make_action_container('Start typing to find a card by title');
@@ -121,7 +130,7 @@ $(document).ready(function() {
         }
     });
 
-    $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong>? = show/hide this window<br><br><strong>Navigation</strong>[ or p = Previous Board<br>] or n = Next Board<br>g, l = Leap to a specific case (comma separated IDs open in tabs)<br>/ = enter type-ahead mode<br>- = zoom out cards<br>+ = zoom in cards<br><br><strong>Selected Item:</strong>[enter] = open selected board<br>c = Expose the ID/Title of selected card");
+    $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong>? = show/hide this window<br><br><strong>Navigation</strong>[ or p = Previous Board<br>] or n = Next Board<br>g, l = Leap to a specific case (comma separated IDs open in tabs)<br>/ = enter type-ahead mode<br>- = zoom out cards<br>+ = zoom in cards<br><br><strong>Selected Item:</strong>[enter] = open selected board<br>c = Expose the ID/Title of selected card<br>s = Expose the URL of the selected card");
 });
 
 function refresh_items() {
