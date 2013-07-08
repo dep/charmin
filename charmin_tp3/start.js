@@ -17,8 +17,10 @@ $(document).ready(function() {
 
         var active_el = $(document.activeElement);
         if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA"  && !active_el.hasClass("cke_wysiwyg_div")) {
+            if (code == "103") {
+                key_active = code;
             /* n or ] */
-            if (code == "110" || code == "93") {
+            } else if (code == "110" || code == "93") {
                 navigate(next_item);
             /* p or [ */
             } else if (code == "112" || code == "91") {
@@ -44,27 +46,19 @@ $(document).ready(function() {
                 script.textContent = actualCode;
                 (document.head||document.documentElement).appendChild(script);
                 script.parentNode.removeChild(script);
-            /* ? */
-            } else if (code == "63" && event.shiftKey == true) {
-                if ($("#advanced_shortcuts").is(":visible") == true) {
-                    $("#advanced_shortcuts").hide();
-                } else {
-                    $("#advanced_shortcuts").show();
+            } else if (code == "115" && !key_active) {
+                if ($(".tai-id-text")) {
+                    make_action_container();
+                    var title = "http://analyte.tpondemand.com/entity/" + $(".tau-selected .tau-id-text").html();
+                    $(".action_container input").prop("readonly", true);
+                    $(".action_container input").val(title);
+                    $(".action_container input").select();
                 }
-            }
-        }
-    });
-
-    $("body").live("keyup", function(event) {
-        code = event.keyCode;
-
-        var active_el = $(document.activeElement);
-        if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA" && !active_el.hasClass("cke_wysiwyg_div")) {
             /* go to */
-            if (code == "71") {
+            } else if (code == "103") {
                 key_active = code;
             /* c */
-            } else if (code == "67") {
+            } else if (code == "99") {
                 if ($(".tau-selected").length) {
                     make_action_container();
                     var title = "#" + $(".tau-selected .tau-id-text").html() + ": " + $(".tau-selected .tau-name").html()
@@ -72,9 +66,8 @@ $(document).ready(function() {
                     $(".action_container input").val(title);
                     $(".action_container input").select();
                 }
-            } else if (code == "76" && key_active) {
+            } else if (code == "108" && key_active) {
                 make_action_container('enter bug/story ID (comma separated IDs open in tabs)');
-                $(".action_container input").focus();
                 $(".action_container input").keyup(function(event) {
                     event.preventDefault();
                     if (event.keyCode == 13) {
@@ -91,17 +84,10 @@ $(document).ready(function() {
                         }
                     }
                 });
-            } else if (code == "83" && !key_active) {
-                make_action_container();
-                var title = "http://analyte.tpondemand.com/entity/" + $(".tau-selected .tau-id-text").html();
-                $(".action_container input").prop("readonly", true);
-                $(".action_container input").val(title);
-                $(".action_container input").select();
             /* / */
-            } else if (code == "191" && event.shiftKey != true) {
-                make_action_container('Start typing to find a card by title');
+            } else if (code == "47" && event.shiftKey != true) {
                 $("div[role=card]").fadeIn();
-                $(".action_container input").focus();
+                make_action_container('Start typing to find a card by title');
                 $(".action_container input").keyup(function(event) {
                     if (event.keyCode != 27) {
                         $("div[role=card]").each(function() {
@@ -115,8 +101,13 @@ $(document).ready(function() {
                         $("div[role=card]").fadeIn();
                     }
                 });
-            } else if (code == "27") {
-                $("div[role=card]").fadeIn();
+            /* ? */
+            } else if (code == "63" && event.shiftKey == true) {
+                if ($("#advanced_shortcuts").is(":visible") == true) {
+                    $("#advanced_shortcuts").hide();
+                } else {
+                    $("#advanced_shortcuts").show();
+                }
             } else {
                 key_active = null;
             }
@@ -130,7 +121,15 @@ $(document).ready(function() {
         }
     });
 
-    $("body").append("<div style='display:none' id='advanced_shortcuts' class='general'><strong>Charmin:</strong>? = show/hide this window<br><br><strong>Navigation</strong>[ or p = Previous Board<br>] or n = Next Board<br>g, l = Leap to a specific case (comma separated IDs open in tabs)<br>/ = enter type-ahead mode<br>- = zoom out cards<br>+ = zoom in cards<br><br><strong>Selected Item:</strong>[enter] = open selected board<br>c = Expose the ID/Title of selected card<br>s = Expose the URL of the selected card");
+    $("body").live("keyup", function(event) {
+        code = event.keyCode;
+        if (code == "27") {
+            $(".action_container").remove();
+            $("div[role=card]").fadeIn();
+        }
+    });
+
+    make_help();
 });
 
 function refresh_items() {
@@ -198,10 +197,29 @@ function make_action_container(placeholder) {
     }
     $(".action_container").remove();
     $("body").before("<div class='action_container'><input type='text' placeholder='" + placeholder + "'></div>");
-    $(".action_container").slideDown();
+    $(".action_container").slideDown(function() {
+        $(".action_container input").focus();
+    });
     $(".action_container input").keyup(function(event) {
         if (event.keyCode == 27) {
             $(".action_container").remove();
         }
     });
+}
+
+function make_help() {
+    $("body").append(["<div style='display:none' id='advanced_shortcuts' class='general'>",
+                        "<strong>Charmin:</strong>",
+                        "? = show/hide this window<br><br>",
+                        "<strong>Navigation</strong>",
+                        "[ or p = Previous Board<br>] or n = Next Board<br>",
+                        "g, l = Leap to a specific case (comma separated IDs open in tabs)<br>",
+                        "/ = enter type-ahead mode<br>",
+                        "- = zoom out cards<br>",
+                        "+ = zoom in cards<br><br>",
+                        "<strong>Selected Item:</strong>",
+                        "[enter] = open selected board<br>",
+                        "c = Expose the ID/Title of selected card<br>",
+                        "s = Expose the URL of the selected card",
+                      "</div>"].join('\n'));
 }
