@@ -1,4 +1,3 @@
-var key_active = "";
 var tp_active_item = "";
 var tp_first_item = "";
 var tp_last_item = "";
@@ -17,10 +16,8 @@ $(document).ready(function() {
 
         var active_el = $(document.activeElement);
         if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA"  && !active_el.hasClass("cke_wysiwyg_div")) {
-            if (code == "103") {
-                key_active = code;
             /* n or ] */
-            } else if (code == "110" || code == "93") {
+            if (code == "110" || code == "93") {
                 navigate(next_item);
             /* p or [ */
             } else if (code == "112" || code == "91") {
@@ -46,7 +43,7 @@ $(document).ready(function() {
                 script.textContent = actualCode;
                 (document.head||document.documentElement).appendChild(script);
                 script.parentNode.removeChild(script);
-            } else if (code == "115" && !key_active) {
+            } else if (code == "117") {
                 if ($(".tai-id-text")) {
                     make_action_container();
                     var title = "http://analyte.tpondemand.com/entity/" + $(".tau-selected .tau-id-text").html();
@@ -54,11 +51,8 @@ $(document).ready(function() {
                     $(".action_container input").val(title);
                     $(".action_container input").select();
                 }
-            /* go to */
-            } else if (code == "103") {
-                key_active = code;
-            /* c */
-            } else if (code == "99") {
+            /* t */
+            } else if (code == "116") {
                 if ($(".tau-selected").length) {
                     make_action_container();
                     var title = "#" + $(".tau-selected .tau-id-text").html() + ": " + $(".tau-selected .tau-name").html()
@@ -66,7 +60,7 @@ $(document).ready(function() {
                     $(".action_container input").val(title);
                     $(".action_container input").select();
                 }
-            } else if (code == "108" && key_active) {
+            } else if (code == "108") {
                 make_action_container('enter bug/story ID (comma separated IDs open in tabs)');
                 $(".action_container input").keyup(function(event) {
                     event.preventDefault();
@@ -77,7 +71,7 @@ $(document).ready(function() {
                             for (var x=0; x < url_array.length; x++) {
                                 chrome.extension.sendMessage({url: "http://analyte.tpondemand.com/entity/" + url_array[x]}, function(response) { });
                             }
-                            $(".action_container").remove();
+                            destroy_action_container();
                         } else {
                             var url = "http://analyte.tpondemand.com/entity/" + ids;
                             window.location.href = url;
@@ -108,8 +102,6 @@ $(document).ready(function() {
                 } else {
                     $("#advanced_shortcuts").show();
                 }
-            } else {
-                key_active = null;
             }
 
             /* Enter/shift-enter */
@@ -124,9 +116,12 @@ $(document).ready(function() {
     $("body").live("keyup", function(event) {
         code = event.keyCode;
         if (code == "27") {
-            $(".action_container").remove();
+            destroy_action_container();
             $("div[role=card]").fadeIn();
         }
+    });
+    $("div[role=card]").live("click", function(event) {
+        destroy_action_container();
     });
 
     make_help();
@@ -195,14 +190,13 @@ function make_action_container(placeholder) {
     if (!placeholder) {
         placeholder = ""
     }
-    $(".action_container").remove();
+    destroy_action_container();
     $("body").before("<div class='action_container'><input type='text' placeholder='" + placeholder + "'></div>");
     $(".action_container").slideDown(function() {
         $(".action_container input").focus();
     });
     $(".action_container input").keyup(function(event) {
         if (event.keyCode == 27) {
-            $(".action_container").remove();
         }
     });
 }
@@ -212,14 +206,21 @@ function make_help() {
                         "<strong>Charmin:</strong>",
                         "? = show/hide this window<br><br>",
                         "<strong>Navigation</strong>",
-                        "[ or p = Previous Board<br>] or n = Next Board<br>",
-                        "g, l = Leap to a specific case (comma separated IDs open in tabs)<br>",
+                        "[ or p = <strong>P</strong>revious Board<br>",
+                        "] or n = <strong>N</strong>ext Board<br>",
+                        "l = <strong>L</strong>eap to a specific case (comma separated IDs open in tabs)<br>",
                         "/ = enter type-ahead mode<br>",
                         "- = zoom out cards<br>",
                         "+ = zoom in cards<br><br>",
                         "<strong>Selected Item:</strong>",
                         "[enter] = open selected board<br>",
-                        "c = Expose the ID/Title of selected card<br>",
-                        "s = Expose the URL of the selected card",
+                        "t = Expose the ID/<strong>t</strong>itle of selected card<br>",
+                        "u = Expose the <strong>U<strong>RL of the selected card",
                       "</div>"].join('\n'));
+}
+
+function destroy_action_container() {
+    $(".action_container").slideUp(function() {
+        $(this).remove();
+    });
 }
