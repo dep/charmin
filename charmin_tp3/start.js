@@ -113,7 +113,7 @@ $(document).ready(function() {
         }
     });
 
-    $("body").live("keyup", function(event) {
+    $("body, .action_container input").live("keyup", function(event) {
         code = event.keyCode;
         if (code == "27") {
             destroy_action_container();
@@ -192,7 +192,7 @@ function make_action_container(placeholder) {
     }
     destroy_action_container();
     $("body").before("<div class='action_container'><input type='text' placeholder='" + placeholder + "'></div>");
-    $(".action_container").slideDown(function() {
+    $(".action_container").slideDown(100, function() {
         $(".action_container input").focus();
     });
     $(".action_container input").keyup(function(event) {
@@ -220,7 +220,7 @@ function make_help() {
 }
 
 function destroy_action_container() {
-    $(".action_container").slideUp(function() {
+    $(".action_container").slideUp(100, function() {
         $(this).remove();
     });
 }
