@@ -215,7 +215,7 @@ function make_help() {
                         "<strong>Selected Item:</strong><br>",
                         "[enter] = open selected board<br>",
                         "t = Expose the ID/<strong>t</strong>itle of selected card<br>",
-                        "u = Expose the <strong>U<strong>RL of the selected card",
+                        "u = Expose the <strong>U</strong>RL of the selected card",
                       "</div>"].join('\n'));
 }
 
