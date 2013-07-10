@@ -95,6 +95,8 @@ $(document).ready(function() {
                         $("div[role=card]").fadeIn();
                     }
                 });
+            } else if (code == "109") {
+                $("button[role='collapser']").click();
             /* ? */
             } else if (code == "63" && event.shiftKey == true) {
                 if ($("#advanced_shortcuts").is(":visible") == true) {
@@ -210,6 +212,7 @@ function make_help() {
                         "] or n = <strong>N</strong>ext Board<br>",
                         "l = <strong>L</strong>eap to a specific case (comma separated IDs open in tabs)<br>",
                         "/ = enter type-ahead mode<br>",
+                        "m = Toggle side <strong>m</strong>enu expand/collapse<br>",
                         "- = zoom out cards<br>",
                         "+ = zoom in cards<br><br>",
                         "<strong>Selected Item:</strong><br>",
