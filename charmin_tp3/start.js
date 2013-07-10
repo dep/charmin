@@ -60,6 +60,12 @@ $(document).ready(function() {
                     $(".action_container input").val(title);
                     $(".action_container input").select();
                 }
+            } else if (code == "111") {
+                if ($(".tau-selected").length) {
+                    $(".tau-selected").each(function() {
+                        chrome.extension.sendMessage({url: "http://analyte.tpondemand.com/entity/" + $(this).find(".tau-id-text").html()}, function(response) { });
+                    });
+                }
             } else if (code == "108") {
                 make_action_container('enter bug/story ID (comma separated IDs open in tabs)');
                 $(".action_container input").keyup(function(event) {
@@ -218,7 +224,8 @@ function make_help() {
                         "<strong>Selected Item:</strong><br>",
                         "[enter] = open selected board<br>",
                         "t = Expose the ID/<strong>t</strong>itle of selected card<br>",
-                        "u = Expose the <strong>U</strong>RL of the selected card",
+                        "u = Expose the <strong>U</strong>RL of the selected card<br>",
+                        "o = <strong>O</strong>pen selected cards in tabs<br>",
                       "</div>"].join('\n'));
 }
 
