@@ -79,8 +79,24 @@ $(document).ready(function() {
                             }
                             destroy_action_container();
                         } else {
-                            var url = "http://analyte.tpondemand.com/entity/" + ids;
-                            window.location.href = url;
+                            var opened=null;
+                            $("div[role=card]").each(function() {
+                                if ($(this).find(".tau-id").html().match(ids)) {
+                                    $("div[role=card]").removeClass("tau-selected")
+                                                       .removeClass("tau-card_selectedasdouble_true");
+                                    $(this).addClass("tau-selected");
+                                    var actualCode = ['$(".tau-selected a").click();'].join('\n');
+                                    var script = document.createElement('script');
+                                    script.textContent = actualCode;
+                                    (document.head||document.documentElement).appendChild(script);
+                                    script.parentNode.removeChild(script);
+                                    opened=true;
+                                }
+                            });
+                            if (!opened) {
+                                var url = "http://analyte.tpondemand.com/entity/" + ids;
+                                window.location.href = url;
+                            }
                         }
                     }
                 });
@@ -111,7 +127,6 @@ $(document).ready(function() {
                     $("#advanced_shortcuts").show();
                 }
             }
-
             /* Enter/shift-enter */
             if (code == "13" || (code == "13" && event.shiftKey == true)) {
                 if (tp_active_item.find("a").length) {
