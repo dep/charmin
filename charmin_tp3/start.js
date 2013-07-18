@@ -120,6 +120,7 @@ $(document).ready(function() {
                 });
             } else if (code == "109") {
                 $("button[role='collapser']").click();
+                board_mouseout();
             /* ? */
             } else if (code == "63" && event.shiftKey == true) {
                 if ($("#advanced_shortcuts").is(":visible") == true) {
@@ -132,6 +133,7 @@ $(document).ready(function() {
             if (code == "13" || (code == "13" && event.shiftKey == true)) {
                 if (tp_active_item.find("a").length) {
                     window.location.href=tp_active_item.find("a").attr("href");
+                    board_mouseout();
                 }
             }
         }
@@ -207,6 +209,7 @@ function navigate(item) {
     } else {
         tp_first_item.addClass(active_class);
     }
+    board_mouseover();
     refresh_items();
 }
 
@@ -249,4 +252,19 @@ function destroy_action_container() {
     $(".action_container").slideUp(100, function() {
         $(this).remove();
     });
+}
+
+function board_mouseover() {
+    var actualCode = ['$(".selected_item").trigger("mouseover");'].join('\n');
+    var script = document.createElement('script');
+    script.textContent = actualCode;
+    (document.head||document.documentElement).appendChild(script);
+    script.parentNode.removeChild(script);
+}
+function board_mouseout() {
+    var actualCode = ['$(".selected_item").trigger("mouseout");'].join('\n');
+    var script = document.createElement('script');
+    script.textContent = actualCode;
+    (document.head||document.documentElement).appendChild(script);
+    script.parentNode.removeChild(script);
 }
