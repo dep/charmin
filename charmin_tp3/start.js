@@ -29,20 +29,12 @@ $(document).ready(function() {
                 }
             /* - */
             } else if (code == "45") {
-                var actualCode = ['var slider_val = parseFloat($(".ui-slider").slider("option", "value")) - 1;',
-                                  '$(".ui-slider").slider("option", "value", slider_val);'].join('\n');
-                var script = document.createElement('script');
-                script.textContent = actualCode;
-                (document.head||document.documentElement).appendChild(script);
-                script.parentNode.removeChild(script);
+                inject(['var slider_val = parseFloat($(".ui-slider").slider("option", "value")) - 1;',
+                       '$(".ui-slider").slider("option", "value", slider_val);'].join('\n'));
             /* + */
             } else if (code == "43") {
-                var actualCode = ['var slider_val = parseFloat($(".ui-slider").slider("option", "value")) + 1;',
-                                  '$(".ui-slider").slider("option", "value", slider_val);'].join('\n');
-                var script = document.createElement('script');
-                script.textContent = actualCode;
-                (document.head||document.documentElement).appendChild(script);
-                script.parentNode.removeChild(script);
+                inject(['var slider_val = parseFloat($(".ui-slider").slider("option", "value")) + 1;',
+                       '$(".ui-slider").slider("option", "value", slider_val);'].join('\n'));
             } else if (code == "117") {
                 if ($(".tai-id-text")) {
                     make_action_container();
@@ -86,11 +78,7 @@ $(document).ready(function() {
                                     $("div[role=card]").removeClass("tau-selected")
                                                        .removeClass("tau-card_selectedasdouble_true");
                                     $(this).addClass("tau-selected");
-                                    var actualCode = ['$(".tau-selected a").click();'].join('\n');
-                                    var script = document.createElement('script');
-                                    script.textContent = actualCode;
-                                    (document.head||document.documentElement).appendChild(script);
-                                    script.parentNode.removeChild(script);
+                                    inject('$(".tau-selected a").click();');
                                     opened=true;
                                 }
                             });
@@ -120,7 +108,7 @@ $(document).ready(function() {
                 });
             } else if (code == "109") {
                 $("button[role='collapser']").click();
-                board_mouseout();
+                inject('$(".selected_item").trigger("mouseout")');
             /* ? */
             } else if (code == "63" && event.shiftKey == true) {
                 if ($("#advanced_shortcuts").is(":visible") == true) {
@@ -133,7 +121,7 @@ $(document).ready(function() {
             if (code == "13" || (code == "13" && event.shiftKey == true)) {
                 if (tp_active_item.find("a").length) {
                     window.location.href=tp_active_item.find("a").attr("href");
-                    board_mouseout();
+                    inject('$(".selected_item").trigger("mouseout")');
                 }
             }
         }
@@ -209,7 +197,7 @@ function navigate(item) {
     } else {
         tp_first_item.addClass(active_class);
     }
-    board_mouseover();
+    inject('$(".selected_item").trigger("mouseover")');
     refresh_items();
 }
 
@@ -254,17 +242,9 @@ function destroy_action_container() {
     });
 }
 
-function board_mouseover() {
-    var actualCode = ['$(".selected_item").trigger("mouseover");'].join('\n');
+function inject(code) {
     var script = document.createElement('script');
-    script.textContent = actualCode;
-    (document.head||document.documentElement).appendChild(script);
-    script.parentNode.removeChild(script);
-}
-function board_mouseout() {
-    var actualCode = ['$(".selected_item").trigger("mouseout");'].join('\n');
-    var script = document.createElement('script');
-    script.textContent = actualCode;
+    script.textContent = code;
     (document.head||document.documentElement).appendChild(script);
     script.parentNode.removeChild(script);
 }
