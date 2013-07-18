@@ -55,7 +55,7 @@ $(document).ready(function() {
             } else if (code == "116") {
                 if ($(".tau-selected").length) {
                     make_action_container();
-                    var title = "#" + $(".tau-selected .tau-id-text").html() + ": " + $(".tau-selected .tau-name").html()
+                    var title = "TP #" + $(".tau-selected .tau-id-text").html() + ": " + $(".tau-selected .tau-name").html()
                     $(".action_container input").prop("readonly", true);
                     $(".action_container input").val(title);
                     $(".action_container input").select();
