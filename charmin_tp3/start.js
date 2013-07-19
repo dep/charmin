@@ -15,7 +15,7 @@ $(document).ready(function() {
         next_item = tp_active_item.next(".tp_wrap");
 
         var active_el = $(document.activeElement);
-        if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA"  && !active_el.hasClass("cke_wysiwyg_div")) {
+        if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA"  && !active_el.hasClass("cke_wysiwyg_div") && !active_el.hasClass("editableText")) {
             /* n or ] */
             if (code == "110" || code == "93") {
                 navigate(next_item);
@@ -36,7 +36,7 @@ $(document).ready(function() {
                 inject(['var slider_val = parseFloat($(".ui-slider").slider("option", "value")) + 1;',
                        '$(".ui-slider").slider("option", "value", slider_val);'].join('\n'));
             } else if (code == "117") {
-                if ($(".tai-id-text")) {
+                if ($(".tau-selected").length) {
                     make_action_container();
                     var title = "http://analyte.tpondemand.com/entity/" + $(".tau-selected .tau-id-text").html();
                     $(".action_container input").prop("readonly", true);
