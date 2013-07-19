@@ -107,8 +107,13 @@ $(document).ready(function() {
                     }
                 });
             } else if (code == "109") {
-                $("button[role='collapser']").click();
+                $(".tau-app-secondary-pane button[role='collapser']").click();
                 inject('$(".selected_item").trigger("mouseout")');
+            /* expand/collapse */
+            } else if (code == "99") {
+                $("div[role='board-body'] button[role='collapser']").click();
+            } else if (code == "101") {
+                $(".tau-collapsed button[role='collapser']").click();
             /* ? */
             } else if (code == "63" && event.shiftKey == true) {
                 if ($("#advanced_shortcuts").is(":visible") == true) {
@@ -227,7 +232,9 @@ function make_help() {
                         "/ = enter type-ahead mode<br>",
                         "m = Toggle side <strong>m</strong>enu expand/collapse<br>",
                         "- = zoom out cards<br>",
-                        "+ = zoom in cards<br><br>",
+                        "+ = zoom in cards<br>",
+                        "e = <strong>E</strong>xpand all horizontal groups<br>",
+                        "c = <strong>C</strong>ollapse all horizontal groups<br><br>",
                         "<strong>Selected Item:</strong><br>",
                         "[enter] = open selected board<br>",
                         "t = Expose the ID/<strong>t</strong>itle of selected card<br>",
