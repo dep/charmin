@@ -61,7 +61,7 @@ $(document).ready(function() {
             } else if (code == "108") {
                 make_action_container('enter bug/story ID (comma separated IDs open in tabs)');
                 $(".action_container input").keyup(function(event) {
-                    $(this).val($(this).val().replace(/[^\d.]/g, ""));
+                    $(this).val($(this).val().replace(/[^0-9.,]/g, ""));
                     event.preventDefault();
                     if (event.keyCode == 13) {
                         ids = $(".action_container input").val();
