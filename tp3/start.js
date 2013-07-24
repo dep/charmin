@@ -14,8 +14,7 @@ $(document).ready(function() {
         prev_item = tp_active_item.prev(".tp_wrap");
         next_item = tp_active_item.next(".tp_wrap");
 
-        var active_el = $(document.activeElement);
-        if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA"  && !active_el.hasClass("cke_wysiwyg_div") && !active_el.hasClass("editableText")) {
+        if (nothing_focused()) {
             /* n or ] */
             if (code == "110" || code == "93") {
                 navigate(next_item);
@@ -111,7 +110,11 @@ $(document).ready(function() {
                 inject('$(".selected_item").trigger("mouseout")');
             /* expand/collapse */
             } else if (code == "99") {
-                $("div[role='board-body'] button[role='collapser']").click();
+                $("li[role='cellholder']").each(function() {
+                    if (!$(this).hasClass("tau-collapsed")) {
+                        $(this).find("button[role='collapser']").click();
+                    }
+                });
             } else if (code == "101") {
                 $(".tau-collapsed button[role='collapser']").click();
             /* ? */
@@ -254,4 +257,11 @@ function inject(code) {
     script.textContent = code;
     (document.head||document.documentElement).appendChild(script);
     script.parentNode.removeChild(script);
+}
+
+function nothing_focused() {
+    var active_el = $(document.activeElement);
+    if (active_el.tagName != "INPUT" && active_el.tagName != "TEXTAREA"  && !active_el.hasClass("cke_wysiwyg_div") && !active_el.hasClass("editableText")) {
+        return true;
+    }
 }
