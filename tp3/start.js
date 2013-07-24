@@ -261,7 +261,7 @@ function inject(code) {
 
 function nothing_focused() {
     var active_el = $(document.activeElement);
-    if (active_el.tagName != "INPUT" && active_el.tagName != "TEXTAREA"  && !active_el.hasClass("cke_wysiwyg_div") && !active_el.hasClass("editableText")) {
+    if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA"  && !active_el.hasClass("cke_wysiwyg_div") && !active_el.hasClass("editableText")) {
         return true;
     }
 }
