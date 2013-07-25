@@ -5,6 +5,7 @@
 		"description": "Adding some functionality to TargetProcess (TP3)",
 		"icons": { "64": "icon-128.png", "48": "icon-48.png", "32": "icon-32.png" },
         "options_page": "options.html",
+		"omnibox": { "keyword" : "tp" },
 		"permissions": [
 				"tabs",
 				"http://*.tpondemand.com/*", "https://*.tpondemand.com/*"

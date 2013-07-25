@@ -6,7 +6,7 @@ var timeout;
 
 $(document).ready(function() {
     active_class = "selected_item"
-    refresh_items();
+    setup_board_nav();
     tp_first_item.addClass(active_class);
 
     // redirect from tp2 story page
@@ -16,6 +16,16 @@ $(document).ready(function() {
         }
     });
 
+    // grab omnibar localstorage, if it exists;
+    chrome.extension.sendRequest({method: "tp2_omnibar"}, function(response) {
+        if(response.status) {
+            $(".i-role-search-string").waitUntilExists(function() {
+                search_for(response.status);
+            });
+        }
+    });
+
+    // keypress listeners
     $("body").live("keypress", function(event) {
         code = event.keyCode;
         tp_active_item = $(".selected_item");
@@ -31,7 +41,6 @@ $(document).ready(function() {
                 navigate(prev_item);
                 if (tp_active_item.length < 1) {
                     tp_last_item.addClass(active_class);
-                    refresh_items();
                     tp_first_item.removeClass(active_class);
                 }
             /* - */
@@ -131,6 +140,7 @@ $(document).ready(function() {
         }
     });
 
+    // keyup listener, for aborting searches, etc.
     $("body, .action_container input").live("keyup", function(event) {
         code = event.keyCode;
         if (code == "27") {
@@ -142,10 +152,12 @@ $(document).ready(function() {
         destroy_action_container();
     });
 
+    // Generate help modal
     make_help();
 });
 
-function refresh_items() {
+// Board navigation
+function setup_board_nav() {
     $(".tau-boardselector__item").each(function() {
         if ($(this).is(":visible")) {
             $(this).addClass("tp_wrap");
@@ -158,38 +170,6 @@ function refresh_items() {
     tp_first_item = $("body").find(".tp_wrap").first();
     tp_last_item = $("body").find(".tp_wrap").last();
 }
-
-function stripe() {
-    $(".generalTable tr.tp_wrap:odd").addClass("odd");
-}
-
-function bug_grid() {
-    $(document).ready(function() {
-        $(".show-states-dialog-link").each(function() {
-            var row_class;
-            if ($(this).html().match("Code Review")) {
-                row_class = "in_review";
-            }
-            if ($(this).html().match("New")) {
-                row_class = "new_case";
-            }
-            if ($(this).html().match("Active")) {
-                row_class = "is_active";
-            }
-            if ($(this).html().match("QA") || $(this).html().match("Demo")) {
-                row_class = "in_qa";
-            }
-            if ($(this).html().match("UAT")) {
-                row_class = "test_passed";
-            }
-            if ($(this).html().match("Resolved") || $(this).html().match("Closed")) {
-                row_class = "resolved";
-            }
-            $(this).parents("tr").first().addClass(row_class);
-        });
-    });
-}
-
 function navigate(item) {
     if (tp_active_item.length > 0) {
         if (item.hasClass("tp_wrap")) {
@@ -202,9 +182,9 @@ function navigate(item) {
         tp_first_item.addClass(active_class);
     }
     inject('$(".selected_item").trigger("mouseover")');
-    refresh_items();
 }
 
+// Action modal (for leaping, etc)
 function make_action_container(placeholder) {
     if (!placeholder) {
         placeholder = ""
@@ -218,6 +198,57 @@ function make_action_container(placeholder) {
         if (event.keyCode == 27) {
         }
     });
+}
+function destroy_action_container() {
+    $(".action_container").slideUp(100, function() {
+        $(this).remove();
+    });
+}
+
+// Code injection
+function inject(code) {
+    var script = document.createElement('script');
+    script.textContent = code;
+    (document.head||document.documentElement).appendChild(script);
+    script.parentNode.removeChild(script);
+}
+
+// Check for focused elements
+function nothing_focused() {
+    var active_el = $(document.activeElement);
+    if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA"  && !active_el.hasClass("cke_wysiwyg_div") && !active_el.hasClass("editableText")) {
+        return true;
+    }
+}
+
+// TP2 redirector
+function check_for_tp2() {
+    if (document.location.href.match("TpView.aspx")) {
+        window.location.href = "http://" + document.domain + "/RestUI/board.aspx?tpid=" + document.location.href.split("#")[1].split("/")[1]
+    } else if (getVal("tpid")) {
+        $(".i-role-search-string").waitUntilExists(function() {
+            search_for(getVal("tpid"));
+        });
+    }
+}
+
+// Search trigger
+function search_for(id) {
+    $(".i-role-search-string").val(id);
+    inject(['$(".i-role-search-string").submit()']);
+}
+
+// Grab url param
+function getVal(name) {
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp(regexS);
+    var results = regex.exec(window.location.href);
+    if(results == null ) {
+        return "";
+    } else {
+        return results[1];
+    }
 }
 
 function make_help() {
@@ -240,56 +271,4 @@ function make_help() {
                         "u = Expose the <strong>U</strong>RL of the selected card<br>",
                         "o = <strong>O</strong>pen selected cards in tabs<br>",
                       "</div>"].join('\n'));
-}
-
-function destroy_action_container() {
-    $(".action_container").slideUp(100, function() {
-        $(this).remove();
-    });
-}
-
-function inject(code) {
-    var script = document.createElement('script');
-    script.textContent = code;
-    (document.head||document.documentElement).appendChild(script);
-    script.parentNode.removeChild(script);
-}
-
-function nothing_focused() {
-    var active_el = $(document.activeElement);
-    if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA"  && !active_el.hasClass("cke_wysiwyg_div") && !active_el.hasClass("editableText")) {
-        return true;
-    }
-}
-
-function check_for_tp2() {
-    if (document.location.href.match("TpView.aspx")) {
-        store_and_redirect(document.location.href.split("#")[1].split("/")[1]);
-    } else if (getVal("tpid")) {
-        $(".i-role-search-string").waitUntilExists(function() {
-            search_for(getVal("tpid"));
-        });
-    }
-}
-
-function store_and_redirect(id) {
-    window.location.href = "http://" + document.domain + "/RestUI/board.aspx?tpid=" + id
-}
-
-function search_for(id) {
-    $(".i-role-search-string").val(id);
-    inject(['$(".i-role-search-string").submit()']);
-}
-
-
-function getVal(name) {
-    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    var regexS = "[\\?&]"+name+"=([^&#]*)";
-    var regex = new RegExp(regexS);
-    var results = regex.exec(window.location.href);
-    if(results == null ) {
-        return "";
-    } else {
-        return results[1];
-    }
 }

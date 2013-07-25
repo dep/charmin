@@ -30,6 +30,16 @@ function(request, sender, sendResponse) {
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     if (request.method == "charmin_tp2_redirect")
       sendResponse({status: localStorage['charmin_tp2_redirect']});
+    else if (request.method == "tp2_omnibar") {
+      sendResponse({status: localStorage['tp2_omnibar']});
+      localStorage.removeItem("tp2_omnibar");
+    }
     else
       sendResponse({}); // snub them.
+});
+
+
+chrome.omnibox.onInputEntered.addListener(
+  function(text) {
+    localStorage.setItem("tp2_omnibar", text);
 });
