@@ -37,7 +37,7 @@ $(document).ready(function() {
             } else if (code == "117") {
                 if ($(".tau-selected").length) {
                     make_action_container();
-                    var title = "http://analyte.tpondemand.com/entity/" + $(".tau-selected .tau-id-text").html();
+                    var title = "http://" + document.domain + "/entity/" + $(".tau-selected .tau-id-text").html();
                     $(".action_container input").prop("readonly", true);
                     $(".action_container input").val(title);
                     $(".action_container input").select();
@@ -54,7 +54,7 @@ $(document).ready(function() {
             } else if (code == "111") {
                 if ($(".tau-selected").length) {
                     $(".tau-selected").each(function() {
-                        chrome.extension.sendMessage({url: "http://analyte.tpondemand.com/entity/" + $(this).find(".tau-id-text").html()}, function(response) { });
+                        chrome.extension.sendMessage({url: "http://" + document.domain + "/entity/" + $(this).find(".tau-id-text").html()}, function(response) { });
                     });
                 }
             } else if (code == "108") {
@@ -67,7 +67,7 @@ $(document).ready(function() {
                         if (event.shiftKey == true || ids.match(",")) {
                             var url_array = ids.split(",");
                             for (var x=0; x < url_array.length; x++) {
-                                chrome.extension.sendMessage({url: "http://analyte.tpondemand.com/entity/" + url_array[x]}, function(response) { });
+                                chrome.extension.sendMessage({url: "http://" + document.domain + "/entity/" + url_array[x]}, function(response) { });
                             }
                             destroy_action_container();
                         } else {
@@ -82,7 +82,7 @@ $(document).ready(function() {
                                 }
                             });
                             if (!opened) {
-                                var url = "http://analyte.tpondemand.com/entity/" + ids;
+                                var url = "http://" + document.domain + "/entity/" + ids;
                                 window.location.href = url;
                             }
                         }
