@@ -20,10 +20,12 @@ function focusOrCreateTab(url) {
 }
 
 chrome.extension.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    if (request.url != "")
-      focusOrCreateTab(request.url);
-  });
+function(request, sender, sendResponse) {
+        if (request.url != "") {
+            focusOrCreateTab(request.url);
+        }
+    }
+);
 
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     if (request.method == "charmin_tp2_redirect")

@@ -4,7 +4,6 @@ var tp_last_item = "";
 var active_class = "";
 var timeout;
 
-
 $(document).ready(function() {
     active_class = "selected_item"
     refresh_items();
@@ -12,10 +11,8 @@ $(document).ready(function() {
 
     // redirect from tp2 story page
     chrome.extension.sendRequest({method: "charmin_tp2_redirect"}, function(response) {
-        if(response.status == "yes" && !localStorage.getItem("redirect_override")) {
+        if(response.status == "yes") {
             check_for_tp2();
-        } else {
-            setTimeout('localStorage.removeItem("redirect_override")', 7000);
         }
     });
 
@@ -66,7 +63,6 @@ $(document).ready(function() {
             } else if (code == "111") {
                 if ($(".tau-selected").length) {
                     $(".tau-selected").each(function() {
-                        localStorage.setItem('redirect_override', true);
                         chrome.extension.sendMessage({url: "http://" + document.domain + "/entity/" + $(this).find(".tau-id-text").html()}, function(response) { });
                     });
                 }
@@ -80,13 +76,12 @@ $(document).ready(function() {
                         if (event.shiftKey == true || ids.match(",")) {
                             var url_array = ids.split(",");
                             for (var x=0; x < url_array.length; x++) {
-                                localStorage.setItem('redirect_override', true);
                                 chrome.extension.sendMessage({url: "http://" + document.domain + "/entity/" + url_array[x]}, function(response) { });
                             }
-                            destroy_action_container();
                         } else {
                             search_for(ids);
                         }
+                        destroy_action_container();
                     }
                 });
             /* / */
@@ -270,31 +265,31 @@ function nothing_focused() {
 function check_for_tp2() {
     if (document.location.href.match("TpView.aspx")) {
         store_and_redirect(document.location.href.split("#")[1].split("/")[1]);
-    } else if (localStorage.getItem('tpid')) {
-        if(wait_for_element($("div[role=card]"), check_for_tp2)) {
-            search_for(localStorage.getItem('tpid'));
-            localStorage.removeItem('tpid');
-            timeout = false;
-        }
+    } else if (getVal("tpid")) {
+        $(".i-role-search-string").waitUntilExists(function() {
+            search_for(getVal("tpid"));
+        });
     }
 }
 
 function store_and_redirect(id) {
-    localStorage.setItem('tpid', id);
-    window.location.href = "http://" + document.domain + "/RestUI/board.aspx"
-}
-
-function wait_for_element(el, handler) {
-    if (el.is(":visible")) {
-        timeout = false;
-        return true;
-    } else {
-        timeout = setInterval(handler, 1000);
-        return false;
-    }
+    window.location.href = "http://" + document.domain + "/RestUI/board.aspx?tpid=" + id
 }
 
 function search_for(id) {
     $(".i-role-search-string").val(id);
-    inject(['$(".i-role-search-form").submit()']);
+    inject(['$(".i-role-search-string").submit()']);
+}
+
+
+function getVal(name) {
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp(regexS);
+    var results = regex.exec(window.location.href);
+    if(results == null ) {
+        return "";
+    } else {
+        return results[1];
+    }
 }
