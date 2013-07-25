@@ -16,15 +16,6 @@ $(document).ready(function() {
         }
     });
 
-    // grab omnibar localstorage, if it exists;
-    chrome.extension.sendRequest({method: "tp2_omnibar"}, function(response) {
-        if(response.status) {
-            $(".i-role-search-string").waitUntilExists(function() {
-                search_for(response.status);
-            });
-        }
-    });
-
     // keypress listeners
     $("body").live("keypress", function(event) {
         code = event.keyCode;

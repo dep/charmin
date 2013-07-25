@@ -30,10 +30,6 @@ function(request, sender, sendResponse) {
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     if (request.method == "charmin_tp2_redirect")
       sendResponse({status: localStorage['charmin_tp2_redirect']});
-    else if (request.method == "tp2_omnibar") {
-      sendResponse({status: localStorage['tp2_omnibar']});
-      localStorage.removeItem("tp2_omnibar");
-    }
     else
       sendResponse({}); // snub them.
 });
@@ -41,5 +37,13 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 
 chrome.omnibox.onInputEntered.addListener(
   function(text) {
-    localStorage.setItem("tp2_omnibar", text);
+      var url = "http://" + localStorage.getItem("charmin_tp3_project") + ".tpondemand.com/RestUI/board.aspx?tpid=" + text;
+      focusOrCreateTab(url);
 });
+
+function first_install() {
+    if (localStorage.getItem('charmin_tp3_project'))
+        return;
+    chrome.tabs.create({url: "options.html"});
+}
+first_install();
