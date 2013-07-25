@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Charmin Options</title>
+    <script src="jquery.js"></script>
+    <script src="options.js"></script>
+    <style>
+        body {
+            font:400 16px Helvetica;
+            margin:30px;
+        }
+        h1 {
+            background:url(icon-128.png) 0 0 no-repeat;
+            padding:40px 0 40px 145px;
+        }
+        form {
+            background:#fff;
+            margin:20px 0;
+            border:1px solid #ccc;
+            padding:20px;
+        }
+        section {
+            background:#f2f2f2;
+            border:1px solid #ddd;
+            width:600px;
+            margin:0 auto;
+            padding:30px;
+        }
+        #status {
+            display:none;
+            background:#ffffe7;
+            margin-top:20px;
+            padding:20px;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <h1>Options</h1>
+
+        <form>
+            <input type="checkbox" name="tp2_redirect" id="tp2_redirect"><label for="tp2_redirect">Redirect TP2 pages to TP3?</label>
+        </form>
+
+        <button type="button" id="save">Save</button>
+        <div id="status"></div>
+    </section>
+</body>
+</html>

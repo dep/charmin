@@ -2,11 +2,22 @@ var tp_active_item = "";
 var tp_first_item = "";
 var tp_last_item = "";
 var active_class = "";
+var timeout;
+
 
 $(document).ready(function() {
     active_class = "selected_item"
     refresh_items();
     tp_first_item.addClass(active_class);
+
+    // redirect from tp2 story page
+    chrome.extension.sendRequest({method: "charmin_tp2_redirect"}, function(response) {
+        if(response.status == "yes" && !localStorage.getItem("redirect_override")) {
+            check_for_tp2();
+        } else {
+            setTimeout('localStorage.removeItem("redirect_override")', 7000);
+        }
+    });
 
     $("body").live("keypress", function(event) {
         code = event.keyCode;
@@ -40,6 +51,7 @@ $(document).ready(function() {
                     var title = "http://analyte.tpondemand.com/entity/" + $(".tau-selected .tau-id-text").html();
                     $(".action_container input").prop("readonly", true);
                     $(".action_container input").val(title);
+
                     $(".action_container input").select();
                 }
             /* t */
@@ -54,6 +66,7 @@ $(document).ready(function() {
             } else if (code == "111") {
                 if ($(".tau-selected").length) {
                     $(".tau-selected").each(function() {
+                        localStorage.setItem('redirect_override', true);
                         chrome.extension.sendMessage({url: "http://analyte.tpondemand.com/entity/" + $(this).find(".tau-id-text").html()}, function(response) { });
                     });
                 }
@@ -67,24 +80,12 @@ $(document).ready(function() {
                         if (event.shiftKey == true || ids.match(",")) {
                             var url_array = ids.split(",");
                             for (var x=0; x < url_array.length; x++) {
+                                localStorage.setItem('redirect_override', true);
                                 chrome.extension.sendMessage({url: "http://analyte.tpondemand.com/entity/" + url_array[x]}, function(response) { });
                             }
                             destroy_action_container();
                         } else {
-                            var opened=null;
-                            $("div[role=card]").each(function() {
-                                if ($(this).find(".tau-id").html().match(ids)) {
-                                    $("div[role=card]").removeClass("tau-selected")
-                                                       .removeClass("tau-card_selectedasdouble_true");
-                                    $(this).addClass("tau-selected");
-                                    inject('$(".tau-selected a").click();');
-                                    opened=true;
-                                }
-                            });
-                            if (!opened) {
-                                var url = "http://analyte.tpondemand.com/entity/" + ids;
-                                window.location.href = url;
-                            }
+                            search_for(ids);
                         }
                     }
                 });
@@ -264,4 +265,36 @@ function nothing_focused() {
     if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA"  && !active_el.hasClass("cke_wysiwyg_div") && !active_el.hasClass("editableText")) {
         return true;
     }
+}
+
+function check_for_tp2() {
+    if (document.location.href.match("TpView.aspx")) {
+        store_and_redirect(document.location.href.split("#")[1].split("/")[1]);
+    } else if (localStorage.getItem('tpid')) {
+        if(wait_for_element($("div[role=card]"), check_for_tp2)) {
+            search_for(localStorage.getItem('tpid'));
+            localStorage.removeItem('tpid');
+            timeout = false;
+        }
+    }
+}
+
+function store_and_redirect(id) {
+    localStorage.setItem('tpid', id);
+    window.location.href = "http://analyte.tpondemand.com/RestUI/board.aspx"
+}
+
+function wait_for_element(el, handler) {
+    if (el.is(":visible")) {
+        timeout = false;
+        return true;
+    } else {
+        timeout = setInterval(handler, 1000);
+        return false;
+    }
+}
+
+function search_for(id) {
+    $(".i-role-search-string").val(id);
+    inject(['$(".i-role-search-form").submit()']);
 }
