@@ -37,3 +37,26 @@
 #advanced_shortcuts {
   float:left;
 }
+
+.ui-autocomplete {
+    background:#fff;
+    position:absolute;
+    z-index:20;
+    margin:0;
+    padding:5px;
+    opacity:0.9;
+    width:40%;
+}
+.ui-autocomplete li {
+    list-style:none;
+}
+.ui-autocomplete a {
+    display:block;
+}
+.ui-state-hover {
+    background:#ffffe7;
+}
+.tau-app-header .tau-context-filter,
+.tau-app>.tau-app-body>.tau-app-secondary-pane {
+    z-index:1 !important;
+}

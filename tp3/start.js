@@ -70,8 +70,13 @@ $(document).ready(function() {
                 }
             } else if (code == "108") {
                 make_action_container('enter bug/story ID (comma separated IDs open in tabs)');
+                var id_array = new Array();
+                $("div[role=card] .tau-id").each(function() {
+                    id_array.push($(this).html());
+                });
                 $(".action_container input").keyup(function(event) {
-                    $(this).val($(this).val().replace(/[^0-9.,]/g, ""));
+                    action_input = $(this);
+                    action_input.val(action_input.val().replace(/[^0-9.,]/g, ""));
                     event.preventDefault();
                     if (event.keyCode == 13) {
                         ids = $(".action_container input").val();
@@ -84,23 +89,48 @@ $(document).ready(function() {
                             search_for(ids);
                         }
                         destroy_action_container();
+                    } else {
+                        var search = action_input.autocomplete({
+                            source: id_array
+                        });
                     }
                 });
             /* / */
             } else if (code == "47" && event.shiftKey != true) {
                 $("div[role=card]").fadeIn();
                 make_action_container('Start typing to find a card by title');
+                var name_array = new Array();
+                $("div[role=card] .tau-name").each(function() {
+                    name_array.push($(this).html());
+                });
                 $(".action_container input").keyup(function(event) {
                     if (event.keyCode != 27) {
+                        var search = $(this).autocomplete({
+                            source: name_array
+                        });
                         $("div[role=card]").each(function() {
-                            if($(this).find(".tau-name").html().toLowerCase().match($(".action_container input").val().toLowerCase()) || $(this).find(".tau-id").html().match($(".action_container input").val().toLowerCase())) {
-                                $(this).fadeIn();
+                            card = $(this);
+                            if(card.find(".tau-name").html().toLowerCase().match($(".action_container input").val().toLowerCase()) || card.find(".tau-id").html().match($(".action_container input").val().toLowerCase())) {
+                                card.fadeIn();
                             } else {
-                                $(this).fadeOut();
+                                card.fadeOut();
                             }
                         });
                     } else {
                         $("div[role=card]").fadeIn();
+                    }
+                    if (event.keyCode == 13) {
+                        $("div[role=card]").each(function() {
+                            if ($(this).is(":visible")) {
+                                $(this).addClass("tau-selected");
+                            }
+                        });
+                        $(".tau-selected").each(function() {
+                            if($(this).is(":visible")) {
+                                search_for($(this).find(".tau-id").html());
+                                $("div[role=card]").removeClass("tau-selected");
+                            }
+                        });
                     }
                 });
             } else if (code == "109") {
