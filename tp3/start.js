@@ -6,8 +6,10 @@ var timeout;
 
 $(document).ready(function() {
     active_class = "selected_item"
-    setup_board_nav();
-    tp_first_item.addClass(active_class);
+    $(".tau-boardselector").waitUntilExists(function() {
+        setup_board_nav();
+        tp_first_item.addClass(active_class);
+    });
 
     // redirect from tp2 story page
     chrome.extension.sendRequest({method: "charmin_tp2_redirect"}, function(response) {
