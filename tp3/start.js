@@ -125,12 +125,8 @@ $(document).ready(function() {
                                 $(this).addClass("tau-selected");
                             }
                         });
-                        $(".tau-selected").each(function() {
-                            if($(this).is(":visible")) {
-                                search_for($(this).find(".tau-id").html());
-                                $("div[role=card]").removeClass("tau-selected");
-                            }
-                        });
+                        search_for($(".tau-selected:visible").first().find(".tau-id").html());
+                        $("div[role=card]").removeClass("tau-selected");
                     }
                 });
             } else if (code == "109") {
