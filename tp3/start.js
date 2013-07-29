@@ -219,6 +219,7 @@ function make_action_container(placeholder) {
     });
 }
 function destroy_action_container() {
+    $(".close").click();
     $(".action_container").slideUp(100, function() {
         $(this).remove();
     });
