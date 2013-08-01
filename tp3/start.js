@@ -44,24 +44,36 @@ $(document).ready(function() {
             } else if (code == "43") {
                 inject(['var slider_val = parseFloat($(".ui-slider").slider("option", "value")) + 1;',
                        '$(".ui-slider").slider("option", "value", slider_val);'].join('\n'));
+            /* u */
             } else if (code == "117") {
-                if ($(".tau-selected").length) {
-                    make_action_container();
-                    var title = "http://" + document.domain + "/entity/" + $(".tau-selected .tau-id-text").html();
-                    $(".action_container input").prop("readonly", true);
-                    $(".action_container input").val(title);
+                if($(".ui-popup")) {
+                    $(".tau-button-link").click();
+                } else {
+                    if ($(".tau-selected").length) {
+                        make_action_container();
+                        var title = "http://" + document.domain + "/entity/" + $(".tau-selected .tau-id-text").html();
+                        $(".action_container input").prop("readonly", true);
+                        $(".action_container input").val(title);
 
-                    $(".action_container input").select();
+                        $(".action_container input").select();
+                    }
                 }
             /* t */
             } else if (code == "116") {
-                if ($(".tau-selected").length) {
-                    make_action_container();
-                    var title = "TP #" + $(".tau-selected .tau-id-text").html() + ": " + $(".tau-selected .tau-name").html()
-                    $(".action_container input").prop("readonly", true);
-                    $(".action_container input").val(title);
-                    $(".action_container input").select();
+                if($(".ui-popup")) {
+                    $(".ui-tags__editor > *").click();
+                    $(".ui-tags__editor input").focus();
+                    setTimeout('$(".ui-tags__editor-active input").val("")', 1);
+                } else {
+                    if ($(".tau-selected").length) {
+                        make_action_container();
+                        var title = "TP #" + $(".tau-selected .tau-id-text").html() + ": " + $(".tau-selected .tau-name").html()
+                        $(".action_container input").prop("readonly", true);
+                        $(".action_container input").val(title);
+                        $(".action_container input").select();
+                    }
                 }
+            /* o */
             } else if (code == "111") {
                 if ($(".tau-selected").length) {
                     $(".tau-selected").each(function() {
@@ -133,12 +145,18 @@ $(document).ready(function() {
                 $(".tau-app-secondary-pane button[role='collapser']").click();
                 inject('$(".selected_item").trigger("mouseout")');
             /* expand/collapse */
+            /* c */
             } else if (code == "99") {
-                $("li[role='cellholder']").each(function() {
-                    if (!$(this).hasClass("tau-collapsed")) {
-                        $(this).find("button[role='collapser']").click();
-                    }
-                });
+                if ($(".ui-popup")) {
+                    $(".ui-comments-add-link").click();
+                } else {
+                    $("li[role='cellholder']").each(function() {
+                        if (!$(this).hasClass("tau-collapsed")) {
+                            $(this).find("button[role='collapser']").click();
+                        }
+                    });
+                }
+            /* e */
             } else if (code == "101") {
                 $(".tau-collapsed button[role='collapser']").click();
             /* ? */
@@ -165,6 +183,7 @@ $(document).ready(function() {
         if (code == "27") {
             destroy_action_container();
             $("div[role=card]").fadeIn();
+            //$(".tau-app-secondary-pane button[role='collapser']").last().click().click();
         }
     });
     $("div[role=card]").live("click", function(event) {
@@ -289,6 +308,11 @@ function make_help() {
                         "[enter] = open selected board<br>",
                         "t = Expose the ID/<strong>t</strong>itle of selected card<br>",
                         "u = Expose the <strong>U</strong>RL of the selected card<br>",
-                        "o = <strong>O</strong>pen selected cards in tabs<br>",
+                        "o = <strong>O</strong>pen selected cards in tabs<br><br>",
+                        "<strong>From Within a Case:</strong><br>",
+                        "c = Add a <strong>c</strong>omment<br>",
+                        "t = Add a <strong>t</strong>ag<br>",
+                        "u = Expose the <strong>U</strong>RL of the open case<br>",
+                        "esc = Close the lightbox",
                       "</div>"].join('\n'));
 }
