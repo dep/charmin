@@ -313,6 +313,6 @@ function make_help() {
                         "c = Add a <strong>c</strong>omment<br>",
                         "t = Add a <strong>t</strong>ag<br>",
                         "u = Expose the <strong>U</strong>RL of the open case<br>",
-                        "esc = Close the lightbox",
+                        "[esc] = Close the lightbox",
                       "</div>"].join('\n'));
 }
