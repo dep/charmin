@@ -63,9 +63,11 @@ $(document).ready(function() {
                     $(".action_container input").select();
                 }
             } else if (code == "111") {
-                if ($(".tau-selected").length) {
-                    $(".tau-selected").each(function() {
-                        chrome.extension.sendMessage({url: "http://" + document.domain + "/entity/" + $(this).find(".tau-id-text").html()}, function(response) { });
+                if ($(".tau-boardclipboard .tau-selected").length) {
+                    $(".tau-boardclipboard .tau-selected").each(function() {
+                        if ($(this).find(".tau-id-text").length) {
+                            chrome.extension.sendMessage({url: "http://" + document.domain + "/entity/" + $(this).find(".tau-id-text").html()}, function(response) { });
+                        }
                     });
                 }
             } else if (code == "108") {
