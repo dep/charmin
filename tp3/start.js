@@ -76,9 +76,16 @@ $(document).ready(function() {
             /* o */
             } else if (code == "111") {
                 if ($(".tau-boardclipboard .tau-selected").length) {
+                    search_for($(".tau-boardclipboard .tau-card").find(".tau-id-text").html());
+                }
+            /* shift-O */
+            } else if (code == "79") {
+                if ($(".tau-boardclipboard .tau-selected").length) {
                     $(".tau-boardclipboard .tau-selected").each(function() {
                         if ($(this).find(".tau-id-text").length) {
-                            chrome.extension.sendMessage({url: "http://" + document.domain + "/entity/" + $(this).find(".tau-id-text").html()}, function(response) { });
+                            if (event.shiftKey == true) {
+                                chrome.extension.sendMessage({url: "http://" + document.domain + "/entity/" + $(this).find(".tau-id-text").html()}, function(response) { });
+                            }
                         }
                     });
                 }
@@ -185,7 +192,6 @@ $(document).ready(function() {
         if (code == "27") {
             destroy_action_container();
             $("div[role=card]").fadeIn();
-            //$(".tau-app-secondary-pane button[role='collapser']").last().click().click();
         }
     });
     $("div[role=card]").live("click", function(event) {
@@ -314,7 +320,8 @@ function make_help() {
                         "[enter] = open selected board<br>",
                         "t = Expose the ID/<strong>t</strong>itle of selected card<br>",
                         "u = Expose the <strong>U</strong>RL of the selected card<br>",
-                        "o = <strong>O</strong>pen selected cards in tabs<br><br>",
+                        "o = <strong>O</strong>pen first selected card<br><br>",
+                        "shift-o = <strong>O</strong>pen selected cards in tabs<br><br>",
                         "<strong>From Within a Case:</strong><br>",
                         "c = Add a <strong>c</strong>omment<br>",
                         "t = Add a <strong>t</strong>ag<br>",
