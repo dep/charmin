@@ -320,7 +320,7 @@ function make_help() {
                         "[enter] = open selected board<br>",
                         "t = Expose the ID/<strong>t</strong>itle of selected card<br>",
                         "u = Expose the <strong>U</strong>RL of the selected card<br>",
-                        "o = <strong>O</strong>pen first selected card<br><br>",
+                        "o = <strong>O</strong>pen first selected card<br>",
                         "shift-o = <strong>O</strong>pen selected cards in tabs<br><br>",
                         "<strong>From Within a Case:</strong><br>",
                         "c = Add a <strong>c</strong>omment<br>",
