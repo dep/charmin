@@ -56,7 +56,10 @@
 .ui-state-hover {
     background:#ffffe7;
 }
-.tau-app-header .tau-context-filter,
-.tau-app>.tau-app-body>.tau-app-secondary-pane {
+.tau-pane-collapser,
+.tau-pane-collapser *,
+.tau-btn-add-bg,
+.tau-btn-add-bg *,
+.tau-app-header .tau-context-filter {
     z-index:1 !important;
 }
