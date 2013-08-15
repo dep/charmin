@@ -263,7 +263,7 @@ function inject(code) {
 // Check for focused elements
 function nothing_focused() {
     var active_el = $(document.activeElement);
-    if (document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA"  && !active_el.hasClass("cke_wysiwyg_div") && !active_el.hasClass("editableText") && !active_el.hasClass("tau-board-name-editor")) {
+    if (document.activeElement.tagName == "BODY") {
         return true;
     }
 }
