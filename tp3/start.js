@@ -174,6 +174,7 @@ $("body").live("keypress", function(event) {
                 $("#advanced_shortcuts").show();
             }
         }
+
         /* Enter/shift-enter */
         if (code == "13" || (code == "13" && event.shiftKey == true)) {
             if (tp_active_item.find("a").length) {
@@ -181,6 +182,20 @@ $("body").live("keypress", function(event) {
                 inject('$(".selected_item").trigger("mouseout")');
             }
         }
+    }
+});
+
+// keyup listener, for aborting searches, etc.
+$("body, .action_container input").live("keyup", function(event) {
+    code = event.keyCode;
+    if (code == "67" || code == "91") {
+        if ($(".action_container input").prop("readonly") == true) {
+            destroy_action_container();
+        }
+    }
+    if (code == "27") {
+        destroy_action_container();
+        $("div[role=card]").fadeIn();
     }
 });
 
