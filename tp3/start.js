@@ -108,6 +108,10 @@ $("body").live("keypress", function(event) {
                         search_for(ids);
                     }
                     destroy_action_container();
+                } else {
+                    var search = action_input.autocomplete({
+                        source: id_array
+                    });
                 }
             });
         /* / */
@@ -120,6 +124,9 @@ $("body").live("keypress", function(event) {
             });
             $(".action_container input").keyup(function(event) {
                 if (event.keyCode != 27) {
+                    var search = $(this).autocomplete({
+                        source: name_array
+                    });
                     $("div[role=card]").each(function() {
                         card = $(this);
                         if(card.find(".tau-name").html().toLowerCase().match($(".action_container input").val().toLowerCase()) || card.find(".tau-id").html().match($(".action_container input").val().toLowerCase())) {
@@ -192,14 +199,6 @@ $("body, .action_container input").live("keyup", function(event) {
     }
 });
 
-// keyup listener, for aborting searches, etc.
-$("body, .action_container input").live("keyup", function(event) {
-    code = event.keyCode;
-    if (code == "27") {
-        destroy_action_container();
-        $("div[role=card]").fadeIn();
-    }
-});
 $("div[role=card]").live("click", function(event) {
     destroy_action_container();
 });
