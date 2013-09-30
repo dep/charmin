@@ -28,9 +28,9 @@ function(request, sender, sendResponse) {
 );
 
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-    if (request.method == "charmin_tp2_redirect")
-      sendResponse({status: localStorage['charmin_tp2_redirect']});
-    else
+    //if (request.method == "charmin_tp2_redirect")
+    //  sendResponse({status: localStorage['charmin_tp2_redirect']});
+    //else
       sendResponse({}); // snub them.
 });
 
