@@ -1,10 +1,3 @@
-// redirect from tp2 story page
-chrome.extension.sendRequest({method: "charmin_tp2_redirect"}, function(response) {
-    if(response.status == "yes") {
-        check_for_tp2();
-    }
-});
-
 var tp_active_item = "";
 var tp_first_item = "";
 var tp_last_item = "";
@@ -269,17 +262,6 @@ function nothing_focused() {
     var active_el = $(document.activeElement);
     if (document.activeElement.tagName == "BODY") {
         return true;
-    }
-}
-
-// TP2 redirector
-function check_for_tp2() {
-    if (document.location.href.match("TpView.aspx")) {
-        window.location.href = "http://" + document.domain + "/RestUI/board.aspx?tpid=" + document.location.href.split("#")[1].split("/")[1]
-    } else if (getVal("tpid")) {
-        $(".i-role-search-string").waitUntilExists(function() {
-            search_for(getVal("tpid"));
-        });
     }
 }
 
