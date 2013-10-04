@@ -40,7 +40,7 @@ $("body").live("keypress", function(event) {
             if (in_popup()) {
                 $(".tau-button-link").click();
             } else {
-                if ($(".tau-selected").length) {
+                if ($(".tau-boardclipboard .tau-selected").length) {
                     make_action_container();
                     var title = "http://" + document.domain + "/entity/" + $(".tau-selected .tau-id-text").html();
                     $(".action_container input").prop("readonly", true);
@@ -56,7 +56,7 @@ $("body").live("keypress", function(event) {
                 $(".ui-tags__editor input").focus();
                 setTimeout('$(".ui-tags__editor-active input").val("")', 1);
             } else {
-                if ($(".tau-selected").length) {
+                if ($(".tau-boardclipboard .tau-selected").length) {
                     make_action_container();
                     var title = "TP #" + $(".tau-selected .tau-id-text").html() + ": " + $(".tau-selected .tau-name").html()
                     $(".action_container input").prop("readonly", true);
