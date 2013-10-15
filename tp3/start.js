@@ -37,7 +37,7 @@ $("body").live("keypress", function(event) {
                     '$(".ui-slider").slider("option", "value", slider_val);'].join('\n'));
         /* u */
         } else if (code == "117") {
-            if (in_popup()) {
+            if (in_case()) {
                 $(".tau-button-link").click();
             } else {
                 if ($(".tau-boardclipboard .tau-selected").length) {
@@ -51,7 +51,7 @@ $("body").live("keypress", function(event) {
             }
         /* t */
         } else if (code == "116") {
-            if (in_popup()) {
+            if (in_case()) {
                 $(".ui-tags__editor > *").click();
                 $(".ui-tags__editor input").focus();
                 setTimeout('$(".ui-tags__editor-active input").val("")', 1);
@@ -147,7 +147,7 @@ $("body").live("keypress", function(event) {
         /* expand/collapse */
         /* c */
         } else if (code == "99") {
-            if (in_popup()) {
+            if (in_case()) {
                 $(".ui-comments-add-link").click();
             } else {
                 $("li[role='cellholder']").each(function() {
@@ -284,8 +284,8 @@ function getVal(name) {
     }
 }
 
-function in_popup() {
-    return $(".ui-popup").is(":visible");
+function in_case() {
+    return $(".ui-popup").is(":visible") || $(".tau-page-single").is(":visible");
 }
 
 function make_help() {
