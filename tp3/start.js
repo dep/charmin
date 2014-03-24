@@ -40,9 +40,9 @@ $("body").live("keypress", function(event) {
             if (in_case()) {
                 $(".tau-button-link").click();
             } else {
-                if ($(".tau-boardclipboard .tau-selected").length) {
+                if ($(".tau-boardclipboard__holder .tau-selected").length) {
                     make_action_container();
-                    var title = "http://" + document.domain + "/entity/" + $(".tau-selected .tau-id-text").html();
+                    var title = "http://" + document.domain + "/entity/" + get_active_id();
                     $(".action_container input").prop("readonly", true);
                     $(".action_container input").val(title);
 
@@ -56,9 +56,9 @@ $("body").live("keypress", function(event) {
                 $(".ui-tags__editor input").focus();
                 setTimeout('$(".ui-tags__editor-active input").val("")', 1);
             } else {
-                if ($(".tau-boardclipboard .tau-selected").length) {
+                if ($(".tau-boardclipboard__holder .tau-selected").length) {
                     make_action_container();
-                    var title = "TP #" + $(".tau-selected .tau-id-text").html() + ": " + $(".tau-selected .tau-name").html()
+                    var title = "TP #" + get_active_id() + ": " + $(".tau-selected .tau-name").html()
                     $(".action_container input").prop("readonly", true);
                     $(".action_container input").val(title);
                     $(".action_container input").select();
@@ -66,25 +66,23 @@ $("body").live("keypress", function(event) {
             }
         /* o */
         } else if (code == "111") {
-            if ($(".tau-boardclipboard .tau-selected").length) {
-                search_for($(".tau-boardclipboard .tau-card").find(".tau-id-text").html());
+            if ($(".tau-boardclipboard__holder .tau-selected").length) {
+                search_for(get_active_id());
             }
-        /* shift-O */
+        /* shift-o */
         } else if (code == "79") {
-            if ($(".tau-boardclipboard .tau-selected").length) {
-                $(".tau-boardclipboard .tau-selected").each(function() {
-                    if ($(this).find(".tau-id-text").length) {
-                        if (event.shiftKey == true) {
-                            chrome.extension.sendMessage({url: "http://" + document.domain + "/entity/" + $(this).find(".tau-id-text").html()}, function(response) { });
-                        }
+            if ($(".tau-boardclipboard__holder > div").length) {
+                $(".tau-boardclipboard__holder > div").each(function() {
+                    if (event.shiftKey == true) {
+                        chrome.extension.sendMessage({url: "http://" + document.domain + "/entity/" + $(this).attr("data-entity-id") }, function(response) { });
                     }
                 });
             }
         } else if (code == "108") {
             make_action_container('enter bug/story ID (comma separated IDs open in tabs)');
             var id_array = new Array();
-            $("div[role=card] .tau-id").each(function() {
-                id_array.push($(this).html());
+            $("div[role=card]").each(function() {
+                id_array.push($(this).attr("data-entity-id"));
             });
             $(".action_container input").keyup(function(event) {
                 action_input = $(this);
@@ -122,7 +120,7 @@ $("body").live("keypress", function(event) {
                     });
                     $("div[role=card]").each(function() {
                         card = $(this);
-                        if(card.find(".tau-name").html().toLowerCase().match($(".action_container input").val().toLowerCase()) || card.find(".tau-id").html().match($(".action_container input").val().toLowerCase())) {
+                        if(card.data("card-data").name.toLowerCase().match($(".action_container input").val().toLowerCase()) || card.attr("data-entity-id").match($(".action_container input").val().toLowerCase())) {
                             card.fadeIn();
                         } else {
                             card.fadeOut();
@@ -137,7 +135,7 @@ $("body").live("keypress", function(event) {
                             $(this).addClass("tau-selected");
                         }
                     });
-                    search_for($(".tau-selected:visible").first().find(".tau-id").html());
+                    search_for(get_active_id());
                     $("div[role=card]").removeClass("tau-selected");
                 }
             });
@@ -314,4 +312,8 @@ function make_help() {
                         "u = expose the <strong>U</strong>RL of the open case<br>",
                         "[esc] = close the lightbox",
                       "</div>"].join('\n'));
+}
+
+function get_active_id() {
+    return $(".tau-boardclipboard__holder > div").first().data("entity-id");
 }
