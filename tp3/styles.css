@@ -3,7 +3,7 @@
 }
 
 .tau-board-view .tau-grid .tau-cell, .tau-board-view .tau-backlog-body .tau-cell, .tau-board-view .tau-timeline .tau-timeline-flow .tau-cell {
-    min-height:100px;
+    min-height:115px !important;
 }
 .action_container {
     display:none;
