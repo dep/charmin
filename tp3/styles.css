@@ -1,6 +1,10 @@
 .selected_item {
   background:#FDFFE5 !important;
 }
+
+.tau-board-view .tau-grid .tau-cell, .tau-board-view .tau-backlog-body .tau-cell, .tau-board-view .tau-timeline .tau-timeline-flow .tau-cell {
+    min-height:100px;
+}
 .action_container {
     display:none;
     padding:8px;
