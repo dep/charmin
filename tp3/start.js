@@ -125,7 +125,7 @@ $("body").live("keypress", function(event) {
                 $(".ui-comments-add-link").click();
             } else {
                 $('.warning').remove();
-                $('body').append('<div class="warning">All swimlanes collapsed (undo with "<strong>e</strong> keystroke")</div>');
+                $('body').append('<div class="warning">All swimlanes collapsed (undo with "<strong>e</strong>" keystroke)</div>');
                 $('.warning').slideDown();
                 setTimeout(function() {
                     $('.warning').slideUp();
