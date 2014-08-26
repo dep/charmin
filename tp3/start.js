@@ -1,34 +1,10 @@
-var tp_active_item = "";
-var tp_first_item = "";
-var tp_last_item = "";
-var active_class = "";
-
-active_class = "selected_item"
-$(".tau-boardselector").waitUntilExists(function() {
-    setup_board_nav();
-    tp_first_item.addClass(active_class);
-});
-
 // keypress listeners
 $("body").live("keypress", function(event) {
     code = event.keyCode;
-    tp_active_item = $(".selected_item");
-    prev_item = tp_active_item.prev(".tp_wrap");
-    next_item = tp_active_item.next(".tp_wrap");
 
     if (nothing_focused()) {
-        /* n or ] */
-        if (code == "110" || code == "93") {
-            navigate(next_item);
-        /* p or [ */
-        } else if (code == "112" || code == "91") {
-            navigate(prev_item);
-            if (tp_active_item.length < 1) {
-                tp_last_item.addClass(active_class);
-                tp_first_item.removeClass(active_class);
-            }
         /* - */
-        } else if (code == "45") {
+        if (code == "45") {
             inject(['var slider_val = parseFloat($(".ui-slider").slider("option", "value")) - 1;',
                     '$(".ui-slider").slider("option", "value", slider_val);'].join('\n'));
         /* + */
@@ -165,14 +141,6 @@ $("body").live("keypress", function(event) {
                 $("#advanced_shortcuts").show();
             }
         }
-
-        /* Enter/shift-enter */
-        if (code == "13" || (code == "13" && event.shiftKey == true)) {
-            if (tp_active_item.find("a").length) {
-                window.location.href=tp_active_item.find("a").attr("href");
-                inject('$(".selected_item").trigger("mouseout")');
-            }
-        }
     }
 });
 
@@ -196,34 +164,6 @@ $("div[role=card]").live("click", function(event) {
 
 // Generate help modal
 make_help();
-
-// Board navigation
-function setup_board_nav() {
-    $(".tau-boardselector__item").each(function() {
-        if ($(this).is(":visible")) {
-            $(this).addClass("tp_wrap");
-        }
-    });
-    $(".tau-boardselector__item").first(function() {
-        $(this).addClass("tp_item_scrollto");
-    });
-
-    tp_first_item = $("body").find(".tp_wrap").first();
-    tp_last_item = $("body").find(".tp_wrap").last();
-}
-function navigate(item) {
-    if (tp_active_item.length > 0) {
-        if (item.hasClass("tp_wrap")) {
-            item.addClass(active_class);
-            tp_active_item.removeClass(active_class);
-        } else {
-            tp_active_item.removeClass(active_class);
-        }
-    } else {
-        tp_first_item.addClass(active_class);
-    }
-    inject('$(".selected_item").trigger("mouseover")');
-}
 
 // Action modal (for leaping, etc)
 function make_action_container(placeholder) {
@@ -291,8 +231,6 @@ function make_help() {
                         "<strong>Charmin:</strong><br>",
                         "? = show/hide this window<br><br>",
                         "<strong>Navigation</strong><br>",
-                        "[ or p = <strong>p</strong>revious Board<br>",
-                        "] or n = <strong>n</strong>ext Board<br>",
                         "l = <strong>l</strong>eap to a specific case (comma separated IDs open in tabs)<br>",
                         "/ = enter type-ahead mode<br>",
                         "m = Toggle side <strong>m</strong>enu expand/collapse<br>",
