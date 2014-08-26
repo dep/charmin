@@ -124,6 +124,13 @@ $("body").live("keypress", function(event) {
             if (in_case()) {
                 $(".ui-comments-add-link").click();
             } else {
+                $('.warning').remove();
+                $('body').append('<div class="warning">All swimlanes collapsed (undo with "<strong>e</strong> keystroke")</div>');
+                $('.warning').slideDown();
+                setTimeout(function() {
+                    $('.warning').slideUp();
+                }, 3000);
+
                 $("li[role='cellholder']").each(function() {
                     if (!$(this).hasClass("tau-collapsed")) {
                         $(this).find("button[role='collapser']").click();
@@ -132,6 +139,7 @@ $("body").live("keypress", function(event) {
             }
         /* e */
         } else if (code == "101") {
+            destroy_action_container();
             $(".tau-collapsed button[role='collapser']").click();
         /* ? */
         } else if (code == "63" && event.shiftKey == true) {
