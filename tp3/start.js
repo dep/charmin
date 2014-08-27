@@ -121,7 +121,7 @@ $("body").live("keypress", function(event) {
         /* expand/collapse */
         /* c */
         } else if (code == "99") {
-            if (in_case()) {
+            if (in_case() == true) {
                 $(".ui-comments-add-link").click();
             } else {
                 $('.warning').remove();
@@ -231,7 +231,7 @@ function getVal(name) {
 }
 
 function in_case() {
-    return $(".ui-popup-content") || $(".tau-page-single").is(":visible");
+    return $(".ui-popup-content").is(":visible") || $(".tau-page-single").is(":visible");
 }
 
 function make_help() {
