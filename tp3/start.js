@@ -231,7 +231,7 @@ function getVal(name) {
 }
 
 function in_case() {
-    return $(".ui-popup").is(":visible") || $(".tau-page-single").is(":visible");
+    return $(".tau-cover-view__overlay") || $(".tau-page-single").is(":visible");
 }
 
 function make_help() {
