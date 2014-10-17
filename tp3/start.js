@@ -25,6 +25,8 @@ $("body").live("keypress", function(event) {
                     $(".action_container input").select();
                 }
             }
+        /* esc */
+        } else if (code == "127") {
         /* t */
         } else if (code == "116") {
             if (in_case()) {
@@ -160,7 +162,11 @@ $("body, .action_container input").live("keyup", function(event) {
             destroy_action_container();
         }
     }
+    /* esc */
     if (code == "27") {
+        if (!in_case()) {
+            $(".tau-clear-selection").click();
+        }
         destroy_action_container();
         $("div[role=card]").fadeIn();
     }
@@ -256,7 +262,7 @@ function make_help() {
                         "c = add a <strong>c</strong>omment<br>",
                         "t = add a <strong>t</strong>ag<br>",
                         "u = expose the <strong>U</strong>RL of the open case<br>",
-                        "[esc] = close the lightbox",
+                        "[esc] = close the lightbox / clear selected cards",
                       "</div>"].join('\n'));
 }
 
