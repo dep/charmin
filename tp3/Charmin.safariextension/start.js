@@ -11,6 +11,13 @@ $("body").live("keypress", function(event) {
         } else if (code == "43") {
             inject(['var slider_val = parseFloat($(".ui-slider").slider("option", "value")) + 1;',
                     '$(".ui-slider").slider("option", "value", slider_val);'].join('\n'));
+        /* n */
+        } else if (code == "110") {
+            if (in_case()) {
+                $(".tau-view-quick-add").click();
+            } else {
+                $(".tau-quick-add").click();
+            }
         /* u */
         } else if (code == "117") {
             if (in_case()) {
@@ -250,6 +257,7 @@ function make_help() {
                         "m = Toggle side <strong>m</strong>enu expand/collapse<br>",
                         "- = zoom out cards<br>",
                         "+ = zoom in cards<br>",
+                        "n = add a <strong>n</strong>ew case<br>",
                         "e = <strong>e</strong>xpand all horizontal/vertical groups<br>",
                         "c = <strong>c</strong>ollapse all horizontal/vertical groups<br><br>",
                         "<strong>Selected Item:</strong><br>",
@@ -260,6 +268,7 @@ function make_help() {
                         "shift-o = <strong>O</strong>pen selected cards in tabs<br><br>",
                         "<strong>From Within a Case:</strong><br>",
                         "c = add a <strong>c</strong>omment<br>",
+                        "n = add a <strong>n</strong>ew case<br>",
                         "t = add a <strong>t</strong>ag<br>",
                         "u = expose the <strong>U</strong>RL of the open case<br>",
                         "[esc] = close the lightbox / clear selected cards",
