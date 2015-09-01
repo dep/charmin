@@ -173,9 +173,9 @@ $("body, .action_container input").live("keyup", function(event) {
     if (code == "27") {
         if (!in_case()) {
             $(".tau-clear-selection").click();
+            destroy_action_container();
+            $("div[role=card]").fadeIn();
         }
-        destroy_action_container();
-        $("div[role=card]").fadeIn();
     }
 });
 
@@ -271,7 +271,7 @@ function make_help() {
                         "n = add a <strong>n</strong>ew case<br>",
                         "t = add a <strong>t</strong>ag<br>",
                         "u = expose the <strong>U</strong>RL of the open case<br>",
-                        "[esc] = close the lightbox / clear selected cards",
+                        "[esc] = clear selected cards",
                       "</div>"].join('\n'));
 }
 

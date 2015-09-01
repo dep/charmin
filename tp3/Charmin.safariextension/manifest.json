@@ -1,6 +1,6 @@
 {
 		"name": "Charmin for TP3 (targetprocess)",
-		"version": "1.9.0",
+		"version": "1.9.2",
 		"manifest_version": 2,
 		"description": "Adding some functionality to TargetProcess (TP3)",
 		"icons": { "64": "icon-128.png", "48": "icon-48.png", "32": "icon-32.png" },
