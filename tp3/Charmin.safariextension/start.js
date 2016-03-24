@@ -131,7 +131,7 @@ $("body").live("keypress", function(event) {
         /* c */
         } else if (code == "99") {
             if (in_case() == true) {
-                $(".ui-comments-add-link").click();
+                $(".add-link.i-role-actionadd").click();
             } else {
                 $('.warning').remove();
                 $('body').append('<div class="warning">All swimlanes collapsed (undo with "<strong>e</strong>" keystroke)</div>');
@@ -172,7 +172,7 @@ $("body, .action_container input").live("keyup", function(event) {
     /* esc */
     if (code == "27") {
         if (!in_case()) {
-            $(".tau-clear-selection").click();
+            $(".tau-icon-small-close").click();
             destroy_action_container();
             $("div[role=card]").fadeIn();
         }
