@@ -13,15 +13,11 @@ $("body").live("keypress", function(event) {
                     '$(".ui-slider").slider("option", "value", slider_val);'].join('\n'));
         /* n */
         } else if (code == "110") {
-            if (in_case()) {
-                $(".tau-view-quick-add").click();
-            } else {
-                $(".tau-quick-add").click();
-            }
+            $(".tau-btn-quick-add").click();
         /* u */
         } else if (code == "117") {
             if (in_case()) {
-                $(".tau-button-link").click();
+                $(".tau-sharelink__trigger").click();
             } else {
                 if ($(".tau-boardclipboard__holder .tau-selected").length) {
                     make_action_container();
@@ -32,14 +28,12 @@ $("body").live("keypress", function(event) {
                     $(".action_container input").select();
                 }
             }
-        /* esc */
-        } else if (code == "127") {
         /* t */
         } else if (code == "116") {
             if (in_case()) {
                 $(".ui-tags__editor > *").click();
-                $(".ui-tags__editor input").focus();
-                setTimeout('$(".ui-tags__editor-active input").val("")', 1);
+                setTimeout('$(".ui-tags__editor__input").val("")', 1);
+                $(".ui-tags__editor__input").focus();
             } else {
                 if ($(".tau-boardclipboard__holder .tau-selected").length) {
                     make_action_container();
@@ -49,47 +43,10 @@ $("body").live("keypress", function(event) {
                     $(".action_container input").select();
                 }
             }
-        /* o */
-        } else if (code == "111") {
-            if ($(".tau-boardclipboard__holder .tau-selected").length) {
-                search_for(get_active_id());
-            }
-        /* shift-o */
-        } else if (code == "79") {
-            if ($(".tau-boardclipboard__holder > div").length) {
-                $(".tau-boardclipboard__holder > div").each(function() {
-                    if (event.shiftKey == true) {
-                        chrome.extension.sendMessage({url: "http://" + document.domain + "/entity/" + $(this).attr("data-entity-id") }, function(response) { });
-                    }
-                });
-            }
+        /* l */
         } else if (code == "108") {
-            make_action_container('enter bug/story ID (comma separated IDs open in tabs)');
-            var id_array = new Array();
-            $("div[role=card]").each(function() {
-                id_array.push($(this).attr("data-entity-id"));
-            });
-            $(".action_container input").keyup(function(event) {
-                action_input = $(this);
-                action_input.val(action_input.val().replace(/[^0-9.,]/g, ""));
-                event.preventDefault();
-                if (event.keyCode == 13) {
-                    ids = $(".action_container input").val();
-                    if (event.shiftKey == true || ids.match(",")) {
-                        var url_array = ids.split(",");
-                        for (var x=0; x < url_array.length; x++) {
-                            chrome.extension.sendMessage({url: "http://" + document.domain + "/entity/" + url_array[x]}, function(response) { });
-                        }
-                    } else {
-                        search_for(ids);
-                    }
-                    destroy_action_container();
-                } else {
-                    var search = action_input.autocomplete({
-                        source: id_array
-                    });
-                }
-            });
+            $('.tau-icon-search').click();
+            $('.i-role-search-string').select();
         /* / */
         } else if (code == "47" && event.shiftKey != true) {
             $("div[role=card]").fadeIn();
@@ -114,15 +71,6 @@ $("body").live("keypress", function(event) {
                 } else {
                     $("div[role=card]").fadeIn();
                 }
-                if (event.keyCode == 13) {
-                    $("div[role=card]").each(function() {
-                        if ($(this).is(":visible")) {
-                            $(this).addClass("tau-selected");
-                        }
-                    });
-                    search_for(get_active_id());
-                    $("div[role=card]").removeClass("tau-selected");
-                }
             });
         } else if (code == "109") {
             $(".tau-app-secondary-pane button[role='collapser']").click();
@@ -131,7 +79,7 @@ $("body").live("keypress", function(event) {
         /* c */
         } else if (code == "99") {
             if (in_case() == true) {
-                $(".add-link.i-role-actionadd").click();
+                inject(['$(".add-link.i-role-actionadd").click()']);
             } else {
                 $('.warning').remove();
                 $('body').append('<div class="warning">All swimlanes collapsed (undo with "<strong>e</strong>" keystroke)</div>');
@@ -227,7 +175,7 @@ function nothing_focused() {
 // Search trigger
 function search_for(id) {
     $(".i-role-search-string").val(id);
-    inject(['$(".i-role-search-string").submit()']);
+    inject(['$(".i-role-search-string").trigger($.Event( "keypress", { which: 13 } ))']);
 }
 
 // Grab url param
@@ -261,17 +209,13 @@ function make_help() {
                         "e = <strong>e</strong>xpand all horizontal/vertical groups<br>",
                         "c = <strong>c</strong>ollapse all horizontal/vertical groups<br><br>",
                         "<strong>Selected Item:</strong><br>",
-                        "[enter] = open selected board<br>",
                         "t = expose the ID/<strong>t</strong>itle of selected card<br>",
-                        "u = expose the <strong>U</strong>RL of the selected card<br>",
-                        "o = <strong>o</strong>pen first selected card<br>",
-                        "shift-o = <strong>O</strong>pen selected cards in tabs<br><br>",
+                        "u = expose the <strong>U</strong>RL of the selected card<br><br>",
                         "<strong>From Within a Case:</strong><br>",
                         "c = add a <strong>c</strong>omment<br>",
                         "n = add a <strong>n</strong>ew case<br>",
                         "t = add a <strong>t</strong>ag<br>",
-                        "u = expose the <strong>U</strong>RL of the open case<br>",
-                        "[esc] = clear selected cards",
+                        "u = expose the <strong>U</strong>RL of the open case",
                       "</div>"].join('\n'));
 }
 
