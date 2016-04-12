@@ -43,13 +43,6 @@ $("body").live("keypress", function(event) {
                     $(".action_container input").select();
                 }
             }
-        /* l */
-        } else if (code == "108") {
-            if (in_case()) {
-                $('div.close').click();
-            }
-            $('.tau-icon-search').click();
-            $('.i-role-search-string').select();
         /* / */
         } else if (code == "47" && event.shiftKey != true) {
             $("div[role=card]").fadeIn();
@@ -119,9 +112,15 @@ $("body, .action_container input").live("keyup", function(event) {
         if ($(".action_container input").prop("readonly") == true) {
             destroy_action_container();
         }
-    }
+    /* l */
+    } else if (code == "76") {
+        if (in_case()) {
+            $('div.close').click();
+        }
+        $('.tau-icon-search').click();
+        $('.i-role-search-string').select();
     /* esc */
-    if (code == "27") {
+    } else if (code == "27") {
         if (!in_case()) {
             $(".tau-icon-small-close").click();
             destroy_action_container();
