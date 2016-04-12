@@ -45,6 +45,9 @@ $("body").live("keypress", function(event) {
             }
         /* l */
         } else if (code == "108") {
+            if (in_case()) {
+                $('div.close').click();
+            }
             $('.tau-icon-search').click();
             $('.i-role-search-string').select();
         /* / */
@@ -78,7 +81,7 @@ $("body").live("keypress", function(event) {
         /* expand/collapse */
         /* c */
         } else if (code == "99") {
-            if (in_case() == true) {
+            if (in_case()) {
                 inject(['$(".add-link.i-role-actionadd").click()']);
             } else {
                 $('.warning').remove();
