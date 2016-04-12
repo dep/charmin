@@ -114,9 +114,6 @@ $("body, .action_container input").live("keyup", function(event) {
         }
     /* l */
     } else if (code == "76") {
-        if (in_case()) {
-            $('div.close').click();
-        }
         $('.tau-icon-search').click();
         $('.i-role-search-string').select();
     /* esc */
