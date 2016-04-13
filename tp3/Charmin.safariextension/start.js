@@ -112,12 +112,6 @@ $("body, .action_container input").live("keyup", function(event) {
         if ($(".action_container input").prop("readonly") == true) {
             destroy_action_container();
         }
-    /* l */
-    } else if (code == "76") {
-        if (!in_case()) {
-            $('.tau-icon-search').click();
-            $('.i-role-search-string').select();
-        }
     /* esc */
     } else if (code == "27") {
         if (!in_case()) {
@@ -201,7 +195,6 @@ function make_help() {
                         "<strong>Charmin:</strong><br>",
                         "? = show/hide this window<br><br>",
                         "<strong>Navigation</strong><br>",
-                        "l = <strong>l</strong>eap to a specific case (comma separated IDs open in tabs)<br>",
                         "/ = enter type-ahead mode<br>",
                         "m = Toggle side <strong>m</strong>enu expand/collapse<br>",
                         "- = zoom out cards<br>",
