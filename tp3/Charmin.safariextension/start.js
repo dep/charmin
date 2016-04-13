@@ -114,8 +114,10 @@ $("body, .action_container input").live("keyup", function(event) {
         }
     /* l */
     } else if (code == "76") {
-        $('.tau-icon-search').click();
-        $('.i-role-search-string').select();
+        if (!in_case()) {
+            $('.tau-icon-search').click();
+            $('.i-role-search-string').select();
+        }
     /* esc */
     } else if (code == "27") {
         if (!in_case()) {
