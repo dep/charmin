@@ -1,124 +1,95 @@
-// keypress listeners
-$("body").live("keypress", function(event) {
-    code = event.keyCode;
+Mousetrap.bind(['-'], function(e) {
+    inject(['var slider_val = parseFloat($(".ui-slider").slider("option", "value")) - 1;',
+            '$(".ui-slider").slider("option", "value", slider_val);'].join('\n'));
+});
+Mousetrap.bind(['+'], function(e) {
+    inject(['var slider_val = parseFloat($(".ui-slider").slider("option", "value")) + 1;',
+            '$(".ui-slider").slider("option", "value", slider_val);'].join('\n'));
+});
+Mousetrap.bind(['l'], function(e) {
+    if (in_case()) {
+        $('.close').click();
+    }
+    $('.tau-icon-search').click();
+    $('.i-role-search-string').select();
+});
+Mousetrap.bind(['n'], function(e) {
+    $(".tau-btn-quick-add").click();
+});
+Mousetrap.bind(['u'], function(e) {
+    if (in_case()) {
+        $(".tau-sharelink__trigger").click();
+    } else {
+        if ($(".tau-boardclipboard__holder .tau-selected").length) {
+            make_action_container();
+            var title = "http://" + document.domain + "/entity/" + get_active_id();
+            $(".action_container input").prop("readonly", true);
+            $(".action_container input").val(title);
+            $(".action_container input").select();
 
-    if (nothing_focused()) {
-        /* - */
-        if (code == "45") {
-            inject(['var slider_val = parseFloat($(".ui-slider").slider("option", "value")) - 1;',
-                    '$(".ui-slider").slider("option", "value", slider_val);'].join('\n'));
-        /* + */
-        } else if (code == "43") {
-            inject(['var slider_val = parseFloat($(".ui-slider").slider("option", "value")) + 1;',
-                    '$(".ui-slider").slider("option", "value", slider_val);'].join('\n'));
-        /* n */
-        } else if (code == "110") {
-            $(".tau-btn-quick-add").click();
-        /* u */
-        } else if (code == "117") {
-            if (in_case()) {
-                $(".tau-sharelink__trigger").click();
-            } else {
-                if ($(".tau-boardclipboard__holder .tau-selected").length) {
-                    make_action_container();
-                    var title = "http://" + document.domain + "/entity/" + get_active_id();
-                    $(".action_container input").prop("readonly", true);
-                    $(".action_container input").val(title);
-
-                    $(".action_container input").select();
-                }
-            }
-        /* t */
-        } else if (code == "116") {
-            if (in_case()) {
-                $(".ui-tags__editor > *").click();
-                setTimeout('$(".ui-tags__editor__input").val("")', 1);
-                $(".ui-tags__editor__input").focus();
-            } else {
-                if ($(".tau-boardclipboard__holder .tau-selected").length) {
-                    make_action_container();
-                    var title = "TP #" + get_active_id() + ": " + $(".tau-selected .tau-name").html()
-                    $(".action_container input").prop("readonly", true);
-                    $(".action_container input").val(title);
-                    $(".action_container input").select();
-                }
-            }
-        /* / */
-        } else if (code == "47" && event.shiftKey != true) {
-            $("div[role=card]").fadeIn();
-            make_action_container('Start typing to find a card by title');
-            var name_array = new Array();
-            $("div[role=card] .tau-name").each(function() {
-                name_array.push($(this).html());
-            });
-            $(".action_container input").keyup(function(event) {
-                if (event.keyCode != 27) {
-                    var search = $(this).autocomplete({
-                        source: name_array
-                    });
-                    $("div[role=card]").each(function() {
-                        card = $(this);
-                        if(card.data("card-data").name.toLowerCase().match($(".action_container input").val().toLowerCase()) || card.attr("data-entity-id").match($(".action_container input").val().toLowerCase())) {
-                            card.fadeIn();
-                        } else {
-                            card.fadeOut();
-                        }
-                    });
-                } else {
-                    $("div[role=card]").fadeIn();
-                }
-            });
-        } else if (code == "109") {
-            $(".tau-app-secondary-pane button[role='collapser']").click();
-            inject('$(".selected_item").trigger("mouseout")');
-        /* expand/collapse */
-        /* c */
-        } else if (code == "99") {
-            if (in_case()) {
-                inject(['$(".add-link.i-role-actionadd").click()']);
-            } else {
-                $('.warning').remove();
-                $('body').append('<div class="warning">All swimlanes collapsed (undo with "<strong>e</strong>" keystroke)</div>');
-                $('.warning').slideDown();
-                setTimeout(function() {
-                    $('.warning').slideUp();
-                }, 3000);
-
-                $("li[role='cellholder']").each(function() {
-                    if (!$(this).hasClass("tau-collapsed")) {
-                        $(this).find("button[role='collapser']").click();
-                    }
-                });
-            }
-        /* e */
-        } else if (code == "101") {
-            destroy_action_container();
-            $(".tau-collapsed button[role='collapser']").click();
-        /* ? */
-        } else if (code == "63" && event.shiftKey == true) {
-            if ($("#advanced_shortcuts").is(":visible") == true) {
-                $("#advanced_shortcuts").hide();
-            } else {
-                $("#advanced_shortcuts").show();
-            }
+            setTimeout(function() {
+                destroy_action_container();
+            }, 1500);
         }
     }
 });
+Mousetrap.bind(['t'], function(e) {
+    if (in_case()) {
+        $(".ui-tags__editor > *").click();
+        setTimeout('$(".ui-tags__editor__input").val("")', 1);
+        $(".ui-tags__editor__input").focus();
+    } else {
+        if ($(".tau-boardclipboard__holder .tau-selected").length) {
+            make_action_container();
+            var title = "TP #" + get_active_id() + ": " + $(".tau-selected .tau-name").html()
+            $(".action_container input").prop("readonly", true);
+            $(".action_container input").val(title);
+            $(".action_container input").select();
 
-// keyup listener, for aborting searches, etc.
-$("body, .action_container input").live("keyup", function(event) {
-    code = event.keyCode;
-    if (code == "67" || code == "91") {
-        if ($(".action_container input").prop("readonly") == true) {
-            destroy_action_container();
+            setTimeout(function() {
+                destroy_action_container();
+            }, 1500);
         }
-    /* esc */
-    } else if (code == "27") {
-        if (!in_case()) {
-            $(".tau-icon-small-close").click();
-            destroy_action_container();
-            $("div[role=card]").fadeIn();
-        }
+    }
+});
+Mousetrap.bind(['c'], function(e) {
+    if (in_case()) {
+        inject(['$(".add-link.i-role-actionadd").click()']);
+    } else {
+        $('.warning').remove();
+        $('body').append('<div class="warning">All swimlanes collapsed (undo with "<strong>e</strong>" keystroke)</div>');
+        $('.warning').slideDown();
+        setTimeout(function() {
+            $('.warning').slideUp();
+        }, 3000);
+
+        $("li[role='cellholder']").each(function() {
+            if (!$(this).hasClass("tau-collapsed")) {
+                $(this).find("button[role='collapser']").click();
+            }
+        });
+    }
+});
+Mousetrap.bind(['m'], function(e) {
+    $(".tau-app-secondary-pane button[role='collapser']").click();
+    inject('$(".selected_item").trigger("mouseout")');
+});
+Mousetrap.bind(['e'], function(e) {
+    destroy_action_container();
+    $(".tau-collapsed button[role='collapser']").click();
+});
+Mousetrap.bind(['?'], function(e) {
+    if ($("#advanced_shortcuts").is(":visible") == true) {
+        $("#advanced_shortcuts").hide();
+    } else {
+        $("#advanced_shortcuts").show();
+    }
+});
+Mousetrap.bind(['esc'], function(e) {
+    if (!in_case()) {
+        $(".tau-icon-small-close").click();
+        destroy_action_container();
+        $("div[role=card]").fadeIn();
     }
 });
 
@@ -159,31 +130,10 @@ function inject(code) {
     script.parentNode.removeChild(script);
 }
 
-// Check for focused elements
-function nothing_focused() {
-    var active_el = $(document.activeElement);
-    if (document.activeElement.tagName == "BODY") {
-        return true;
-    }
-}
-
 // Search trigger
 function search_for(id) {
     $(".i-role-search-string").val(id);
     inject(['$(".i-role-search-string").trigger($.Event( "keypress", { which: 13 } ))']);
-}
-
-// Grab url param
-function getVal(name) {
-    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    var regexS = "[\\?&]"+name+"=([^&#]*)";
-    var regex = new RegExp(regexS);
-    var results = regex.exec(window.location.href);
-    if(results == null ) {
-        return "";
-    } else {
-        return results[1];
-    }
 }
 
 function in_case() {
@@ -195,7 +145,7 @@ function make_help() {
                         "<strong>Charmin:</strong><br>",
                         "? = show/hide this window<br><br>",
                         "<strong>Navigation</strong><br>",
-                        "/ = enter type-ahead mode<br>",
+                        "l = focus the search box<br>",
                         "m = Toggle side <strong>m</strong>enu expand/collapse<br>",
                         "- = zoom out cards<br>",
                         "+ = zoom in cards<br>",
