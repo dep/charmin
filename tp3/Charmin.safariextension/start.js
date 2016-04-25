@@ -12,7 +12,8 @@ Mousetrap.bind(['l'], function(e) {
     }
     $('.tau-icon-search').click();
     $('.i-role-search-string').select();
-});
+    $('.i-role-search-string').val('').select();
+}, 'keyup');
 Mousetrap.bind(['n'], function(e) {
     $(".tau-btn-quick-add").click();
 });
@@ -22,7 +23,7 @@ Mousetrap.bind(['u'], function(e) {
     } else {
         if ($(".tau-boardclipboard__holder .tau-selected").length) {
             make_action_container();
-            var title = "http://" + document.domain + "/entity/" + get_active_id();
+            var title = "https://" + document.domain + "/entity/" + get_active_id();
             $(".action_container input").prop("readonly", true);
             $(".action_container input").val(title);
             $(".action_container input").select();

@@ -37,7 +37,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 
 chrome.omnibox.onInputEntered.addListener(
   function(text) {
-      var url = "http://" + localStorage.getItem("charmin_tp3_project") + ".tpondemand.com/RestUI/board.aspx?tpid=" + text;
+      var url = "https://" + localStorage.getItem("charmin_tp3_project") + ".tpondemand.com/RestUI/board.aspx?tpid=" + text;
       focusOrCreateTab(url);
 });
 
