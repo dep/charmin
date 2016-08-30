@@ -14,9 +14,6 @@ Mousetrap.bind(['l'], function(e) {
     $('.i-role-search-string').select();
     $('.i-role-search-string').val('').select();
 }, 'keyup');
-Mousetrap.bind(['n'], function(e) {
-    $(".tau-btn-quick-add").click();
-});
 Mousetrap.bind(['u'], function(e) {
     if (in_case()) {
         $(".tau-sharelink__trigger").click();
@@ -71,20 +68,13 @@ Mousetrap.bind(['c'], function(e) {
         });
     }
 });
-Mousetrap.bind(['m'], function(e) {
-    $(".tau-app-secondary-pane button[role='collapser']").click();
-    inject('$(".selected_item").trigger("mouseout")');
-});
 Mousetrap.bind(['e'], function(e) {
     destroy_action_container();
     $(".tau-collapsed button[role='collapser']").click();
 });
-Mousetrap.bind(['?'], function(e) {
-    if ($("#advanced_shortcuts").is(":visible") == true) {
-        $("#advanced_shortcuts").hide();
-    } else {
-        $("#advanced_shortcuts").show();
-    }
+Mousetrap.bind(['m'], function(e) {
+    $(".tau-app-secondary-pane button[role='collapser']").click();
+    inject('$(".selected_item").trigger("mouseout")');
 });
 Mousetrap.bind(['esc'], function(e) {
     if (!in_case()) {
@@ -97,9 +87,6 @@ Mousetrap.bind(['esc'], function(e) {
 $("div[role=card]").live("click", function(event) {
     destroy_action_container();
 });
-
-// Generate help modal
-make_help();
 
 // Action modal (for leaping, etc)
 function make_action_container(placeholder) {
@@ -139,29 +126,6 @@ function search_for(id) {
 
 function in_case() {
     return $(".ui-popup-content").is(":visible") || $(".tau-page-single").is(":visible");
-}
-
-function make_help() {
-    $("body").append(["<div style='display:none' id='advanced_shortcuts' class='general'>",
-                        "<strong>Charmin:</strong><br>",
-                        "? = show/hide this window<br><br>",
-                        "<strong>Navigation</strong><br>",
-                        "l = focus the search box<br>",
-                        "m = Toggle side <strong>m</strong>enu expand/collapse<br>",
-                        "- = zoom out cards<br>",
-                        "+ = zoom in cards<br>",
-                        "n = add a <strong>n</strong>ew case<br>",
-                        "e = <strong>e</strong>xpand all horizontal/vertical groups<br>",
-                        "c = <strong>c</strong>ollapse all horizontal/vertical groups<br><br>",
-                        "<strong>Selected Item:</strong><br>",
-                        "t = expose the ID/<strong>t</strong>itle of selected card<br>",
-                        "u = expose the <strong>U</strong>RL of the selected card<br><br>",
-                        "<strong>From Within a Case:</strong><br>",
-                        "c = add a <strong>c</strong>omment<br>",
-                        "n = add a <strong>n</strong>ew case<br>",
-                        "t = add a <strong>t</strong>ag<br>",
-                        "u = expose the <strong>U</strong>RL of the open case",
-                      "</div>"].join('\n'));
 }
 
 function get_active_id() {
