@@ -7,66 +7,49 @@ Mousetrap.bind(['+'], function(e) {
             '$(".ui-slider").slider("option", "value", slider_val);'].join('\n'));
 });
 Mousetrap.bind(['l'], function(e) {
-    if (in_case()) {
-        $('.close').click();
-    }
     $('.tau-icon-search').click();
     $('.i-role-search-string').select();
     $('.i-role-search-string').val('').select();
 }, 'keyup');
 Mousetrap.bind(['u'], function(e) {
-    if (in_case()) {
-        $(".tau-sharelink__trigger").click();
-    } else {
-        if ($(".tau-boardclipboard__holder .tau-selected").length) {
-            make_action_container();
-            var title = "https://" + document.domain + "/entity/" + get_active_id();
-            $(".action_container input").prop("readonly", true);
-            $(".action_container input").val(title);
-            $(".action_container input").select();
+    if ($(".tau-selected").length) {
+        make_action_container();
+        var title = "https://" + document.domain + "/entity/" + get_active_id();
+        $(".action_container input").prop("readonly", true);
+        $(".action_container input").val(title);
+        $(".action_container input").select();
 
-            setTimeout(function() {
-                destroy_action_container();
-            }, 1500);
-        }
+        setTimeout(function() {
+            destroy_action_container();
+        }, 1500);
     }
 });
 Mousetrap.bind(['t'], function(e) {
-    if (in_case()) {
-        $(".ui-tags__editor > *").click();
-        setTimeout('$(".ui-tags__editor__input").val("")', 1);
-        $(".ui-tags__editor__input").focus();
-    } else {
-        if ($(".tau-boardclipboard__holder .tau-selected").length) {
-            make_action_container();
-            var title = "TP #" + get_active_id() + ": " + $(".tau-selected .tau-name").html()
-            $(".action_container input").prop("readonly", true);
-            $(".action_container input").val(title);
-            $(".action_container input").select();
+    if ($(".tau-selected").length) {
+        make_action_container();
+        var title = "TP #" + get_active_id() + ": " + $(".tau-board .tau-selected").first().find(".tau-entity-full-name").html()
+        $(".action_container input").prop("readonly", true);
+        $(".action_container input").val(title);
+        $(".action_container input").select();
 
-            setTimeout(function() {
-                destroy_action_container();
-            }, 1500);
-        }
+        setTimeout(function() {
+            destroy_action_container();
+        }, 1500);
     }
 });
 Mousetrap.bind(['c'], function(e) {
-    if (in_case()) {
-        inject(['$(".add-link.i-role-actionadd").click()']);
-    } else {
-        $('.warning').remove();
-        $('body').append('<div class="warning">All swimlanes collapsed (undo with "<strong>e</strong>" keystroke)</div>');
-        $('.warning').slideDown();
-        setTimeout(function() {
-            $('.warning').slideUp();
-        }, 3000);
+    $('.warning').remove();
+    $('body').append('<div class="warning">All swimlanes collapsed (undo with "<strong>e</strong>" keystroke)</div>');
+    $('.warning').slideDown();
+    setTimeout(function() {
+        $('.warning').slideUp();
+    }, 3000);
 
-        $("li[role='cellholder']").each(function() {
-            if (!$(this).hasClass("tau-collapsed")) {
-                $(this).find("button[role='collapser']").click();
-            }
-        });
-    }
+    $("li[role='cellholder']").each(function() {
+        if (!$(this).hasClass("tau-collapsed")) {
+            $(this).find("button[role='collapser']").click();
+        }
+    });
 });
 Mousetrap.bind(['e'], function(e) {
     destroy_action_container();
@@ -77,11 +60,8 @@ Mousetrap.bind(['m'], function(e) {
     inject('$(".selected_item").trigger("mouseout")');
 });
 Mousetrap.bind(['esc'], function(e) {
-    if (!in_case()) {
-        $(".tau-icon-small-close").click();
-        destroy_action_container();
-        $("div[role=card]").fadeIn();
-    }
+    destroy_action_container();
+    $("div[role=card]").fadeIn();
 });
 
 $("div[role=card]").live("click", function(event) {
@@ -124,10 +104,6 @@ function search_for(id) {
     inject(['$(".i-role-search-string").trigger($.Event( "keypress", { which: 13 } ))']);
 }
 
-function in_case() {
-    return $(".ui-popup-content").is(":visible") || $(".tau-page-single").is(":visible");
-}
-
 function get_active_id() {
-    return $(".tau-boardclipboard__holder > div").first().data("entity-id");
+    return $(".tau-board .tau-selected").first().data("entity-id");
 }
